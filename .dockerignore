@@ -1,0 +1,29 @@
+# Segredos — nunca entram na imagem. As variáveis chegam por --env-file em
+# tempo de execução, não assadas na camada do Docker.
+.env
+.env.local
+*.pem
+.oci/
+
+# Histórico e metadados
+.git
+.gitignore
+.github
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Não são necessários para servir a aplicação
+testes/
+docs/
+README.md
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
