@@ -1,0 +1,45 @@
+codigo,nome,marca,categoria,subcategoria,preco_brl,volume,tipo_pele,ativos_principais,indicacoes,seguro_gestante,vegano,estoque,avaliacao
+LB-0001,Sérum Niacinamida 10% + Zinco,Lumina Lab,Tratamento,Sérum,89.90,30ml,oleosa;mista;acneica,Niacinamide;Zinc PCA,controle de oleosidade;poros dilatados;marcas de acne,sim,sim,142,4.7
+LB-0002,Sérum Vitamina C 15% + Ácido Ferúlico,Lumina Lab,Tratamento,Sérum,159.90,30ml,todas,Ethyl Ascorbic Acid;Ferulic Acid;Tocopherol,manchas;viço;antioxidante,sim,sim,68,4.8
+LB-0003,Sérum Ácido Hialurônico 2%,Lumina Lab,Tratamento,Sérum,74.90,30ml,todas,Sodium Hyaluronate;Panthenol,hidratação profunda;linhas de desidratação,sim,sim,203,4.6
+LB-0004,Retinol 0.3% em Sérum Encapsulado,Lumina Lab,Tratamento,Sérum,139.90,30ml,mista;oleosa;madura,Retinol;Squalane,linhas finas;renovação celular;acne,nao,sim,54,4.5
+LB-0005,Retinal 0.05% Noite Avançada,Lumina Lab,Tratamento,Sérum,189.90,30ml,mista;normal;madura,Retinal;Ceramide NP,antienvelhecimento;textura irregular,nao,sim,31,4.9
+LB-0006,Granactive Retinoid 2% Suave,Lumina Lab,Tratamento,Sérum,124.90,30ml,sensivel;mista;normal,Hydroxypinacolone Retinoate;Squalane,primeira vez com retinoide;pele reativa,nao,sim,47,4.6
+LB-0007,Bakuchiol 1% Alternativa Vegetal,Lumina Lab,Tratamento,Sérum,109.90,30ml,sensivel;seca;madura,Bakuchiol;Squalane,antienvelhecimento sem irritação,consultar,sim,39,4.4
+LB-0008,Ácido Azelaico 10% Creme,Lumina Lab,Tratamento,Creme,94.90,30g,acneica;sensivel;mista,Azelaic Acid;Niacinamide,rosácea;manchas;acne inflamatória,sim,sim,86,4.7
+LB-0009,Ácido Salicílico 2% Solução,Lumina Lab,Tratamento,Tônico,69.90,120ml,oleosa;acneica,Salicylic Acid;Betaine,cravos;poros obstruídos,nao,sim,118,4.5
+LB-0010,Ácido Mandélico 8% Noturno,Lumina Lab,Tratamento,Sérum,99.90,30ml,sensivel;acneica;mista,Mandelic Acid;Allantoin,esfoliação suave;pele morena e negra,nao,sim,42,4.6
+LB-0011,Ácido Glicólico 7% Tônico Renovador,Lumina Lab,Tratamento,Tônico,84.90,150ml,oleosa;mista;normal,Glycolic Acid;Aloe Barbadensis Leaf Juice,textura;luminosidade,nao,sim,73,4.3
+LB-0012,PHA Gluconolactona 10% Gel,Lumina Lab,Tratamento,Gel,89.90,50ml,sensivel;seca;normal,Gluconolactone;Panthenol,esfoliação para pele reativa,sim,sim,35,4.5
+LB-0013,Alfa-Arbutin 2% + Ácido Tranexâmico,Lumina Lab,Tratamento,Sérum,119.90,30ml,todas,Alpha-Arbutin;Tranexamic Acid,melasma;manchas pós-acne,sim,sim,61,4.8
+LB-0014,Peptídeos Matrixyl 3000 Firmeza,Lumina Lab,Tratamento,Sérum,149.90,30ml,madura;seca;normal,Palmitoyl Tripeptide-1;Sodium Hyaluronate,firmeza;colágeno;linhas de expressão,sim,sim,44,4.6
+LB-0015,Cica Repair Sérum Calmante,Lumina Lab,Tratamento,Sérum,79.90,30ml,sensivel;acneica;todas,Centella Asiatica Extract;Panthenol;Beta-Glucan,vermelhidão;pós-procedimento;barreira,sim,sim,157,4.9
+LB-0101,Hidratante Ceramidas Barreira,Lumina Care,Hidratação,Creme facial,79.90,50g,seca;sensivel;normal,Ceramide NP;Cholesterol;Squalane,barreira comprometida;ressecamento,sim,sim,188,4.8
+LB-0102,Gel Hidratante Oil-Free,Lumina Care,Hidratação,Gel facial,64.90,50g,oleosa;mista;acneica,Sodium Hyaluronate;Niacinamide;Betaine,hidratação leve;toque seco,sim,sim,211,4.6
+LB-0103,Creme Nutritivo Karité Noturno,Lumina Care,Hidratação,Creme facial,98.90,50g,seca;madura,Butyrospermum Parkii Butter;Ceramide NP;Tocopherol,pele muito seca;nutrição noturna,sim,nao,72,4.7
+LB-0104,Esqualano Vegetal Puro,Lumina Care,Hidratação,Óleo facial,69.90,30ml,todas,Squalane,selar hidratação;pele desidratada,sim,sim,134,4.7
+LB-0105,Bruma Hidratante Pantenol,Lumina Care,Hidratação,Bruma,49.90,150ml,todas,Panthenol;Glycerin;Aloe Barbadensis Leaf Juice,refrescar durante o dia;fixar maquiagem,sim,sim,96,4.2
+LB-0106,Creme Corporal Aveia Coloidal,Lumina Care,Hidratação,Corpo,54.90,200g,seca;sensivel,Colloidal Oatmeal;Glycerin;Ceramide NP,pele atópica;coceira;ressecamento,sim,sim,143,4.8
+LB-0107,Manteiga Corporal Karité Intensa,Lumina Care,Hidratação,Corpo,62.90,200g,seca,Butyrospermum Parkii Butter;Tocopherol,pele muito seca;cotovelos e joelhos,sim,nao,88,4.6
+LB-0201,Protetor Solar Facial FPS 60 Toque Seco,Lumina Sun,Proteção solar,Facial,109.90,50g,oleosa;mista;acneica,Tinosorb S;Ethylhexyl Triazone;Niacinamide,uso diário;pele oleosa;não comedogênico,sim,sim,176,4.7
+LB-0202,Protetor Solar Facial FPS 50 Com Cor,Lumina Sun,Proteção solar,Facial,124.90,40g,todas,Tinosorb M;Titanium Dioxide;Iron Oxides,cobertura leve;melasma;luz visível,sim,sim,94,4.8
+LB-0203,Protetor Solar Mineral FPS 45 Sensível,Lumina Sun,Proteção solar,Facial,134.90,40g,sensivel;acneica,Zinc Oxide;Titanium Dioxide;Bisabolol,rosácea;pós-procedimento;gestantes,sim,sim,57,4.5
+LB-0204,Protetor Solar Corporal FPS 50 Spray,Lumina Sun,Proteção solar,Corpo,89.90,200ml,todas,Uvinul A Plus;Ethylhexyl Triazone,praia e piscina;resistente à água,sim,sim,121,4.4
+LB-0301,Gel de Limpeza Ácido Salicílico,Lumina Clean,Limpeza,Gel de limpeza,59.90,150ml,oleosa;acneica;mista,Salicylic Acid;Coco-Glucoside,cravos;oleosidade,nao,sim,198,4.6
+LB-0302,Sabonete Facial Syndet Suave,Lumina Clean,Limpeza,Barra,39.90,90g,sensivel;seca;normal,Sodium Cocoyl Isethionate;Glycerin,limpeza sem ressecar;pele reativa,sim,sim,167,4.7
+LB-0303,Água Micelar 3 em 1,Lumina Clean,Limpeza,Água micelar,54.90,200ml,todas,Poloxamer;Glycerin;Panthenol,primeira limpeza;remover maquiagem leve,sim,sim,231,4.5
+LB-0304,Óleo Demaquilante Bifásico,Lumina Clean,Limpeza,Óleo de limpeza,72.90,150ml,todas,Caprylic/Capric Triglyceride;Helianthus Annuus Seed Oil,maquiagem à prova d'água;dupla limpeza,sim,sim,109,4.8
+LB-0305,Máscara de Argila Verde Detox,Lumina Clean,Limpeza,Máscara,49.90,80g,oleosa;mista;acneica,Kaolin;Charcoal Powder;Zinc PCA,controle de oleosidade;1 a 2x por semana,sim,sim,87,4.3
+LB-0401,Base Líquida Sérum Cobertura Média,Lumina Color,Maquiagem,Base,129.90,30ml,todas,Sodium Hyaluronate;Niacinamide;Silica,acabamento natural;18 tons,sim,sim,64,4.6
+LB-0402,Corretivo Alta Cobertura,Lumina Color,Maquiagem,Corretivo,79.90,7ml,todas,Squalane;Tocopherol,olheiras;manchas;14 tons,sim,sim,112,4.5
+LB-0403,Batom Hidratante Acetinado,Lumina Color,Maquiagem,Batom,64.90,3.5g,todas,Butyrospermum Parkii Butter;Tocopherol,conforto;longa duração média,sim,nao,178,4.7
+LB-0404,Blush em Bastão Cremoso,Lumina Color,Maquiagem,Blush,69.90,8g,todas,Squalane;Mica,acabamento natural;fácil aplicação,sim,sim,93,4.8
+LB-0405,Máscara de Cílios Volume Extremo,Lumina Color,Maquiagem,Máscara de cílios,74.90,10ml,todas,Panthenol;Copernicia Cerifera Wax,volume;à prova de smudge,sim,sim,145,4.4
+LB-0501,Shampoo Antioleosidade Sem Sulfato,Lumina Hair,Cabelo,Shampoo,64.90,300ml,couro cabeludo oleoso,Coco-Glucoside;Zinc PCA;Salicylic Acid,oleosidade;caspa leve,sim,sim,132,4.5
+LB-0502,Condicionador Reconstrução Proteica,Lumina Hair,Cabelo,Condicionador,69.90,300ml,cabelo com química,Hydrolyzed Keratin;Behentrimonium Chloride,cabelo quebradiço;pós-descoloração,sim,nao,104,4.6
+LB-0503,Máscara Hidratação Intensa 4 em 1,Lumina Hair,Cabelo,Máscara capilar,89.90,250g,cabelo seco;cacheado,Butyrospermum Parkii Butter;Panthenol;Amodimethicone,hidratação;definição de cachos,sim,nao,78,4.7
+LB-0504,Leave-in Multifuncional Térmico,Lumina Hair,Cabelo,Leave-in,59.90,150ml,todos os tipos,Amodimethicone;Panthenol,proteção térmica;anti-frizz,sim,nao,156,4.5
+LB-0505,Óleo Capilar Argan Finalizador,Lumina Hair,Cabelo,Óleo capilar,79.90,60ml,cabelo seco;com química,Argania Spinosa Kernel Oil;Tocopherol,brilho;pontas ressecadas,sim,sim,91,4.6
+LB-0601,Kit Rotina Iniciante Pele Oleosa,Lumina Lab,Kit,Kit,219.90,3 itens,oleosa;mista;acneica,Salicylic Acid;Niacinamide;Tinosorb S,limpeza + sérum + protetor,sim,sim,29,4.9
+LB-0602,Kit Antimanchas Completo,Lumina Lab,Kit,Kit,329.90,3 itens,todas,Ethyl Ascorbic Acid;Alpha-Arbutin;Tinosorb M,vitamina C + clareador + protetor com cor,sim,sim,18,4.8
+LB-0603,Kit Barreira Reparadora,Lumina Care,Kit,Kit,189.90,3 itens,sensivel;seca,Ceramide NP;Centella Asiatica Extract;Panthenol,pele sensibilizada;pós-ácido,sim,sim,24,4.9
