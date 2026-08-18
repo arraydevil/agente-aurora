@@ -3,183 +3,355 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#fbe3ea">
 <title>Aurora — Lumina Beauty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..600&family=Inter:wght@300..700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --roxo: #6b4e9b;
-    --roxo-claro: #8f6fc7;
-    --lilas: #ede7f6;
-    --rosa: #e8a0bf;
-    --fundo: #faf7fd;
-    --cartao: #ffffff;
-    --texto: #2b2b33;
-    --suave: #6f6b7d;
-    --borda: #e4dcf0;
-    --sombra: 0 2px 16px rgba(107, 78, 155, .09);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --lilas: #2a2338;
-      --fundo: #17141f;
-      --cartao: #1f1b2b;
-      --texto: #ece9f3;
-      --suave: #a49fb5;
-      --borda: #322a45;
-      --roxo: #b79ae8;
-      --roxo-claro: #9b7cd4;
-      --sombra: 0 2px 16px rgba(0, 0, 0, .35);
-    }
+    --rosa-topo:   #fbdfe8;
+    --rosa-meio:   #fdeef2;
+    --creme:       #fdf8f6;
+    --tinta:       #2a2226;
+    --tinta-suave: #8a7a80;
+    --acento:      #c95f80;
+    --acento-claro:#e79bb4;
+    --vidro:       rgba(255, 255, 255, .62);
+    --vidro-forte: rgba(255, 255, 255, .86);
+    --borda:       rgba(201, 95, 128, .14);
+    --sombra:      0 6px 24px rgba(180, 120, 145, .13);
+    --sombra-sutil:0 2px 10px rgba(180, 120, 145, .10);
+    --serifa: "Playfair Display", "Didot", "Bodoni MT", Georgia, serif;
+    --sans: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; }
+
+  html { background: var(--rosa-topo); }
+
   body {
     margin: 0;
-    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-    background: var(--fundo);
-    color: var(--texto);
-    line-height: 1.55;
+    min-height: 100vh;
+    font-family: var(--sans);
+    font-weight: 400;
+    color: var(--tinta);
+    line-height: 1.6;
+    background:
+      linear-gradient(180deg,
+        var(--rosa-topo) 0%,
+        var(--rosa-meio) 38%,
+        var(--creme) 100%) fixed;
+    -webkit-font-smoothing: antialiased;
   }
 
-  header {
-    background: linear-gradient(120deg, var(--roxo) 0%, var(--roxo-claro) 60%, var(--rosa) 100%);
-    color: #fff;
-    padding: 22px 20px 26px;
-  }
-  .cabecalho { max-width: 860px; margin: 0 auto; }
-  .marca { display: flex; align-items: center; gap: 12px; }
-  .avatar {
-    width: 42px; height: 42px; border-radius: 50%;
-    background: rgba(255,255,255,.22);
-    display: grid; place-items: center;
-    font-size: 21px; flex-shrink: 0;
-  }
-  h1 { margin: 0; font-size: 1.28rem; font-weight: 650; letter-spacing: -.01em; }
-  .subtitulo { margin: 2px 0 0; font-size: .84rem; opacity: .92; }
-  .selos { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
-  .selo {
-    background: rgba(255,255,255,.16);
-    border: 1px solid rgba(255,255,255,.24);
-    padding: 3px 10px; border-radius: 20px;
-    font-size: .71rem; letter-spacing: .02em;
+  .rotulo {
+    font-size: .66rem;
+    font-weight: 500;
+    letter-spacing: .19em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
   }
 
-  main { max-width: 860px; margin: 0 auto; padding: 20px 16px 130px; }
+  /* ---------------------------------------------------------- cabeçalho */
 
-  .exemplos { margin-bottom: 18px; }
-  .exemplos p { font-size: .78rem; color: var(--suave); margin: 0 0 8px; text-transform: uppercase; letter-spacing: .06em; }
+  header { padding: 30px 22px 4px; }
+  .conteudo { max-width: 720px; margin: 0 auto; }
+
+  .linha-topo {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 16px;
+  }
+
+  .selo-base {
+    background: var(--vidro-forte);
+    border-radius: 999px;
+    padding: 9px 15px;
+    text-align: center;
+    box-shadow: var(--sombra-sutil);
+    flex-shrink: 0;
+  }
+  .selo-base b {
+    display: block;
+    font-family: var(--serifa);
+    font-size: 1.12rem;
+    line-height: 1.1;
+    color: var(--acento);
+  }
+  .selo-base span { font-size: .55rem; letter-spacing: .16em; color: var(--tinta-suave); }
+
+  h1 {
+    font-family: var(--serifa);
+    font-weight: 400;
+    font-size: clamp(2.9rem, 12vw, 4.1rem);
+    line-height: .94;
+    letter-spacing: -.02em;
+    margin: 16px 0 0;
+  }
+  h1 em { font-style: italic; }
+
+  .assinatura {
+    display: flex; align-items: center; gap: 10px;
+    margin: 16px 0 0; flex-wrap: wrap;
+  }
+  .marca-pilula {
+    background: rgba(255, 255, 255, .7);
+    color: var(--acento);
+    border-radius: 999px;
+    padding: 3px 11px;
+    font-size: .6rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .barra-gradiente {
+    height: 3px; border-radius: 999px; margin: 18px 0 12px;
+    background: linear-gradient(90deg,
+      #f2c9d5 0%, #e7d3c4 22%, #cfdcc8 44%, #c6d5e4 68%, #ddc9e0 86%, #f2c9d5 100%);
+    position: relative;
+  }
+  .barra-gradiente::after {
+    content: ""; position: absolute; top: 50%; left: 62%;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: #fff; transform: translate(-50%, -50%);
+    box-shadow: 0 1px 5px rgba(160, 110, 130, .4);
+  }
+
+  .frase-guia { font-size: .93rem; color: var(--tinta); margin: 0 0 4px; }
+  .frase-guia b { color: var(--acento); font-weight: 600; }
+
+  /* ------------------------------------------------------------- painéis */
+
+  main { padding: 20px 22px 190px; }
+
+  .secao-titulo {
+    display: flex; justify-content: space-between;
+    align-items: baseline; margin: 26px 0 11px;
+  }
+
+  .indicadores {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .indicador {
+    background: var(--vidro);
+    border: 1px solid rgba(255, 255, 255, .75);
+    border-radius: 18px;
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: var(--sombra-sutil);
+    backdrop-filter: blur(9px);
+  }
+  .indicador .icone { font-size: .95rem; opacity: .55; }
+  .indicador .numero {
+    font-family: var(--serifa);
+    font-size: 1.65rem;
+    line-height: 1.15;
+    margin: 3px 0 1px;
+  }
+  .indicador .legenda { font-size: .55rem; letter-spacing: .15em; text-transform: uppercase; color: var(--tinta-suave); }
+  .indicador .nota { font-size: .68rem; color: var(--acento); margin-top: 4px; }
+
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
-    background: var(--cartao); border: 1px solid var(--borda);
-    color: var(--texto); border-radius: 18px;
-    padding: 7px 13px; font-size: .81rem; cursor: pointer;
-    transition: .16s; font-family: inherit; text-align: left;
+    background: var(--vidro-forte);
+    border: 1px solid rgba(255, 255, 255, .8);
+    color: var(--tinta);
+    border-radius: 999px;
+    padding: 9px 15px;
+    font-size: .81rem;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    box-shadow: var(--sombra-sutil);
+    transition: transform .16s, color .16s;
   }
-  .chip:hover { border-color: var(--roxo); color: var(--roxo); transform: translateY(-1px); }
+  .chip:hover { transform: translateY(-1px); color: var(--acento); }
 
-  .conversa { display: flex; flex-direction: column; gap: 14px; }
-  .turno { display: flex; gap: 10px; align-items: flex-start; }
+  /* -------------------------------------------------------------- conversa */
+
+  .conversa { display: flex; flex-direction: column; gap: 13px; margin-top: 14px; }
+
+  .turno { display: flex; gap: 9px; align-items: flex-start; }
   .turno.cliente { flex-direction: row-reverse; }
+
+  .orbe {
+    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; margin-top: 3px;
+    background: radial-gradient(circle at 32% 28%, #fff 0%, var(--acento-claro) 48%, var(--acento) 100%);
+    box-shadow: inset 0 -2px 5px rgba(150, 70, 100, .28);
+  }
+  .turno.cliente .orbe {
+    background: radial-gradient(circle at 32% 28%, #fff 0%, #d8cfe0 45%, #9c8fae 100%);
+  }
+
   .bolha {
-    background: var(--cartao); border: 1px solid var(--borda);
-    border-radius: 16px; padding: 13px 16px;
-    max-width: 82%; box-shadow: var(--sombra);
-    white-space: pre-wrap; word-wrap: break-word;
+    background: var(--vidro-forte);
+    border: 1px solid rgba(255, 255, 255, .8);
+    border-radius: 20px;
+    padding: 14px 17px;
+    max-width: 84%;
+    box-shadow: var(--sombra);
+    backdrop-filter: blur(9px);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: .92rem;
   }
   .turno.cliente .bolha {
-    background: var(--roxo); color: #fff; border-color: transparent;
-  }
-  .mini {
-    width: 30px; height: 30px; border-radius: 50%;
-    display: grid; place-items: center; font-size: 15px; flex-shrink: 0;
-    background: var(--lilas); border: 1px solid var(--borda);
+    background: linear-gradient(135deg, var(--acento-claro), var(--acento));
+    color: #fff;
+    border-color: transparent;
   }
 
-  .fontes { margin-top: 11px; border-top: 1px dashed var(--borda); padding-top: 9px; }
+  .fontes { margin-top: 12px; border-top: 1px solid var(--borda); padding-top: 10px; }
   .fontes summary {
-    cursor: pointer; font-size: .76rem; color: var(--roxo);
-    font-weight: 600; letter-spacing: .01em;
+    cursor: pointer; list-style: none;
+    font-size: .62rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--acento); font-weight: 600;
   }
+  .fontes summary::-webkit-details-marker { display: none; }
   .fonte-item {
-    font-size: .74rem; color: var(--suave);
-    padding: 5px 0 5px 11px; border-left: 2px solid var(--lilas); margin-top: 6px;
+    font-size: .73rem; color: var(--tinta-suave);
+    padding: 6px 0 6px 11px; margin-top: 6px;
+    border-left: 2px solid var(--acento-claro);
   }
-  .fonte-item b { color: var(--texto); font-weight: 600; }
+  .fonte-item b { color: var(--tinta); font-weight: 600; }
+
   .rodape-bolha {
-    margin-top: 8px; font-size: .7rem; color: var(--suave);
-    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-suave);
   }
-  .tag {
-    background: var(--lilas); color: var(--roxo);
-    padding: 1px 8px; border-radius: 10px; font-weight: 600;
+  .etiqueta {
+    background: rgba(201, 95, 128, .1);
+    color: var(--acento);
+    padding: 2px 9px; border-radius: 999px; font-weight: 600;
   }
 
   .digitando span {
-    display: inline-block; width: 6px; height: 6px; margin-right: 3px;
-    background: var(--roxo); border-radius: 50%; animation: pulso 1.2s infinite;
+    display: inline-block; width: 6px; height: 6px; margin-right: 4px; border-radius: 50%;
+    background: var(--acento-claro); animation: pulso 1.2s infinite;
   }
-  .digitando span:nth-child(2) { animation-delay: .2s; }
-  .digitando span:nth-child(3) { animation-delay: .4s; }
-  @keyframes pulso { 0%, 60%, 100% { opacity: .25 } 30% { opacity: 1 } }
+  .digitando span:nth-child(2) { animation-delay: .18s; }
+  .digitando span:nth-child(3) { animation-delay: .36s; }
+  @keyframes pulso { 0%, 60%, 100% { opacity: .22 } 30% { opacity: 1 } }
+
+  /* ------------------------------------------------------------- entrada */
 
   .barra {
     position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--cartao); border-top: 1px solid var(--borda);
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    padding: 14px 22px calc(16px + env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, rgba(253, 248, 246, 0) 0%, var(--creme) 42%);
   }
-  .barra-interna { max-width: 860px; margin: 0 auto; display: flex; gap: 9px; }
+  .barra-interna {
+    max-width: 720px; margin: 0 auto;
+    display: flex; gap: 9px; align-items: flex-end;
+    background: var(--vidro-forte);
+    border: 1px solid rgba(255, 255, 255, .9);
+    border-radius: 26px;
+    padding: 7px 7px 7px 18px;
+    box-shadow: var(--sombra);
+    backdrop-filter: blur(11px);
+  }
   textarea {
-    flex: 1; resize: none; font-family: inherit; font-size: .93rem;
-    padding: 11px 14px; border-radius: 14px;
-    border: 1px solid var(--borda); background: var(--fundo); color: var(--texto);
-    max-height: 130px; line-height: 1.45;
+    flex: 1; resize: none; border: none; background: transparent;
+    font-family: inherit; font-size: .92rem; color: var(--tinta);
+    padding: 9px 0; max-height: 120px; line-height: 1.5;
   }
-  textarea:focus { outline: 2px solid var(--roxo-claro); outline-offset: -1px; }
+  textarea:focus { outline: none; }
+  textarea::placeholder { color: var(--tinta-suave); }
+
   button.enviar {
-    background: var(--roxo); color: #fff; border: none;
-    border-radius: 14px; padding: 0 20px; font-size: .93rem;
-    font-weight: 600; cursor: pointer; font-family: inherit;
+    width: 40px; height: 40px; flex-shrink: 0;
+    border: none; border-radius: 50%; cursor: pointer;
+    background: linear-gradient(135deg, var(--acento-claro), var(--acento));
+    color: #fff; font-size: 1.05rem; line-height: 1;
+    box-shadow: 0 3px 10px rgba(201, 95, 128, .34);
+    transition: transform .15s;
   }
-  button.enviar:disabled { opacity: .45; cursor: not-allowed; }
+  button.enviar:hover:not(:disabled) { transform: scale(1.06); }
+  button.enviar:disabled { opacity: .4; cursor: not-allowed; }
+
   .aviso {
-    max-width: 860px; margin: 9px auto 0; font-size: .69rem;
-    color: var(--suave); text-align: center;
+    max-width: 720px; margin: 10px auto 0;
+    font-size: .64rem; color: var(--tinta-suave); text-align: center; line-height: 1.5;
+  }
+
+  @media (min-width: 640px) {
+    .bolha { max-width: 76%; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="cabecalho">
-    <div class="marca">
-      <div class="avatar">💜</div>
-      <div>
-        <h1>Aurora</h1>
-        <p class="subtitulo">Atendente virtual da Lumina Beauty</p>
+  <div class="conteudo">
+    <div class="linha-topo">
+      <span class="rotulo">Lumina Beauty</span>
+      <div class="selo-base">
+        <b id="contador">—</b>
+        <span>TRECHOS</span>
       </div>
     </div>
-    <div class="selos">
-      <span class="selo" id="selo-trechos">carregando base…</span>
-      <span class="selo">PDF + CSV</span>
-      <span class="selo">respostas com fonte citada</span>
+
+    <h1>Oi, eu sou<br><em>Aurora</em></h1>
+
+    <div class="assinatura">
+      <span class="rotulo">Consultora virtual</span>
+      <span class="marca-pilula">PDF + CSV</span>
     </div>
+
+    <div class="barra-gradiente"></div>
+    <p class="frase-guia">
+      Respondo sobre produtos, ingredientes e políticas da loja —
+      <b>sempre citando a fonte.</b>
+    </p>
   </div>
 </header>
 
-<main>
-  <section class="exemplos">
-    <p>Experimente perguntar</p>
+<main class="conteudo">
+
+  <section>
+    <div class="secao-titulo"><span class="rotulo">Minha base hoje</span></div>
+    <div class="indicadores">
+      <div class="indicador">
+        <div class="icone">📄</div>
+        <div class="numero" id="ind-documentos">—</div>
+        <div class="legenda">Documentos</div>
+        <div class="nota">PDF e CSV</div>
+      </div>
+      <div class="indicador">
+        <div class="icone">✦</div>
+        <div class="numero" id="ind-ingredientes">132</div>
+        <div class="legenda">Ingredientes</div>
+        <div class="nota">nomenclatura INCI</div>
+      </div>
+      <div class="indicador">
+        <div class="icone">◈</div>
+        <div class="numero" id="ind-motor" style="font-size:1.1rem">—</div>
+        <div class="legenda">Motor</div>
+        <div class="nota" id="ind-motor-nota">verificando</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="secao-titulo"><span class="rotulo">Como posso ajudar</span></div>
     <div class="chips" id="chips"></div>
   </section>
 
   <section class="conversa" id="conversa" aria-live="polite"></section>
+
 </main>
 
 <div class="barra">
   <div class="barra-interna">
     <textarea id="entrada" rows="1" placeholder="Pergunte sobre produtos, ingredientes, entrega, trocas…"></textarea>
-    <button class="enviar" id="enviar">Enviar</button>
+    <button class="enviar" id="enviar" aria-label="Enviar pergunta">→</button>
   </div>
-  <p class="aviso">Aurora responde apenas com base nos documentos da Lumina Beauty. Não substitui avaliação de dermatologista.</p>
+  <p class="aviso">
+    Aurora responde apenas com base nos documentos da Lumina Beauty.<br>
+    Conteúdo informativo — não substitui avaliação de dermatologista.
+  </p>
 </div>
 
 <script>
@@ -198,13 +370,15 @@ function escapar(texto) {
 function adicionarTurno(papel, texto) {
   const turno = document.createElement('div');
   turno.className = 'turno ' + papel;
-  const mini = document.createElement('div');
-  mini.className = 'mini';
-  mini.textContent = papel === 'cliente' ? '🙋‍♀️' : '💜';
+
+  const orbe = document.createElement('div');
+  orbe.className = 'orbe';
+
   const bolha = document.createElement('div');
   bolha.className = 'bolha';
   bolha.innerHTML = escapar(texto);
-  turno.append(mini, bolha);
+
+  turno.append(orbe, bolha);
   conversa.appendChild(turno);
   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   return bolha;
@@ -215,7 +389,7 @@ function renderizarFontes(bolha, dados) {
     const bloco = document.createElement('details');
     bloco.className = 'fontes';
     const titulo = document.createElement('summary');
-    titulo.textContent = `📄 ${dados.fontes.length} trecho(s) consultado(s)`;
+    titulo.textContent = `▸ ${dados.fontes.length} trechos consultados`;
     bloco.appendChild(titulo);
     dados.fontes.forEach(f => {
       const item = document.createElement('div');
@@ -227,7 +401,7 @@ function renderizarFontes(bolha, dados) {
   }
   const rodape = document.createElement('div');
   rodape.className = 'rodape-bolha';
-  rodape.innerHTML = `<span class="tag">${escapar(dados.provedor)}</span><span>${dados.tempo_ms} ms</span>`;
+  rodape.innerHTML = `<span class="etiqueta">${escapar(dados.provedor)}</span><span>${dados.tempo_ms} ms</span>`;
   bolha.appendChild(rodape);
 }
 
@@ -271,13 +445,13 @@ entrada.addEventListener('keydown', evento => {
 });
 entrada.addEventListener('input', () => {
   entrada.style.height = 'auto';
-  entrada.style.height = Math.min(entrada.scrollHeight, 130) + 'px';
+  entrada.style.height = Math.min(entrada.scrollHeight, 120) + 'px';
 });
 
 fetch('/api/exemplos')
   .then(r => r.json())
   .then(d => {
-    d.exemplos.slice(0, 6).forEach(texto => {
+    d.exemplos.slice(0, 5).forEach(texto => {
       const chip = document.createElement('button');
       chip.className = 'chip';
       chip.textContent = texto;
@@ -290,19 +464,25 @@ fetch('/api/exemplos')
 fetch('/api/saude')
   .then(r => r.json())
   .then(d => {
-    const docs = Object.keys(d.documentos || {}).length;
-    document.getElementById('selo-trechos').textContent =
-      `${d.trechos_indexados} trechos · ${docs} documentos`;
+    document.getElementById('contador').textContent = d.trechos_indexados;
+    document.getElementById('ind-documentos').textContent = Object.keys(d.documentos || {}).length;
+
+    const ativo = (d.provedores_llm || []).find(p => p.configurado);
+    const nome = ativo ? ativo.provedor : 'extrativo';
+    document.getElementById('ind-motor').textContent = nome;
+    document.getElementById('ind-motor-nota').textContent =
+      nome === 'extrativo' ? 'sem LLM configurado' : 'em linguagem natural';
   })
   .catch(() => {
-    document.getElementById('selo-trechos').textContent = 'base offline';
+    document.getElementById('contador').textContent = '—';
+    document.getElementById('ind-motor-nota').textContent = 'base offline';
   });
 
 adicionarTurno('aurora',
-  'Oi! Eu sou a Aurora, atendente da Lumina Beauty. 💜\n\n' +
-  'Respondo sobre nosso catálogo, ingredientes cosméticos, combinação de ativos, ' +
-  'prazos de entrega, trocas, devoluções e privacidade — sempre citando de qual ' +
-  'documento tirei a informação.\n\nO que você quer saber?');
+  'Que bom te ver por aqui. 💗\n\n' +
+  'Posso te ajudar com o catálogo da Lumina, ingredientes cosméticos, combinação ' +
+  'de ativos, prazos de entrega, trocas e privacidade — e sempre te mostro de qual ' +
+  'documento tirei a resposta.\n\nO que você quer saber?');
 </script>
 </body>
 </html>
