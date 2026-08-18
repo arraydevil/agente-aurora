@@ -4,16 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#fbe3ea">
+<meta name="theme-color" content="#fbdde7">
 <title>Aurora — Lumina Beauty</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..600&family=Inter:wght@300..700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --rosa-topo:   #fbdfe8;
-    --rosa-meio:   #fdeef2;
-    --creme:       #fdf8f6;
+    /* Paleta sakura: pétala rosa no topo, miolo claro, estame amarelo no pé. */
+    --rosa-topo:   #fbdde7;
+    --rosa-meio:   #fdeef1;
+    --petala:      #fdf4ea;
+    --creme:       #fdf7e4;
     --tinta:       #2a2226;
     --tinta-suave: #8a7a80;
     --acento:      #c95f80;
@@ -41,7 +43,8 @@
     background:
       linear-gradient(180deg,
         var(--rosa-topo) 0%,
-        var(--rosa-meio) 38%,
+        var(--rosa-meio) 30%,
+        var(--petala) 62%,
         var(--creme) 100%) fixed;
     -webkit-font-smoothing: antialiased;
   }
@@ -81,7 +84,7 @@
   .barra-gradiente {
     height: 3px; border-radius: 999px; margin: 20px 0 2px;
     background: linear-gradient(90deg,
-      #f2c9d5 0%, #e7d3c4 22%, #cfdcc8 44%, #c6d5e4 68%, #ddc9e0 86%, #f2c9d5 100%);
+      #efb5c9 0%, #ffffff 27%, #fbe9b4 54%, #ffffff 79%, #efb5c9 100%);
   }
 
   /* ------------------------------------------------------------- painéis */
@@ -198,7 +201,7 @@
   .barra {
     position: fixed; bottom: 0; left: 0; right: 0;
     padding: 14px 22px calc(16px + env(safe-area-inset-bottom));
-    background: linear-gradient(180deg, rgba(253, 248, 246, 0) 0%, var(--creme) 42%);
+    background: linear-gradient(180deg, rgba(253, 247, 228, 0) 0%, var(--creme) 42%);
   }
   .barra-interna {
     max-width: 720px; margin: 0 auto;
