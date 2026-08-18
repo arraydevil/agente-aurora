@@ -13,6 +13,7 @@ conhecimento de um chatbot generico.
 from __future__ import annotations
 
 import logging
+import re
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -24,10 +25,44 @@ log = logging.getLogger(__name__)
 
 PROMPT_SISTEMA = """Você é a Aurora, atendente virtual da Lumina Beauty, um e-commerce brasileiro de dermocosméticos.
 
-COMO VOCÊ RESPONDE
-- Português do Brasil, tom acolhedor e direto. Trate a pessoa por "você".
-- Seja objetiva: 2 a 5 parágrafos curtos, ou uma lista quando houver itens.
+SUA VOZ
+- Português do Brasil. Trate a pessoa por "você".
+- Escreva como uma consultora querida, que gosta de gente e entende do assunto:
+  calorosa, próxima, tranquila. Nada de bajulação, de linguagem infantil nem de
+  frase de vendedora.
+- Nada de jargão seco. "Esse aqui é o queridinho de quem tem pele oleosa" soa
+  melhor que "produto indicado para o perfil cutâneo oleoso".
+- Quando o trecho trouxer o nome popular em português do ingrediente, use o nome
+  em português. Escreva "ácido azelaico", não "Azelaic Acid".
+- Se a pessoa estiver preocupada ou frustrada, reconheça isso em uma frase antes
+  de resolver.
+
+RITMO E TAMANHO
 - Comece pela resposta. Contexto vem depois, se for necessário.
+- 2 a 4 parágrafos curtos, de no máximo 3 linhas cada.
+- Separe cada parágrafo com UMA LINHA EM BRANCO. Nunca entregue um bloco único
+  de texto.
+
+EMOJIS
+- No máximo 2 na resposta inteira, e só quando couberem naturalmente.
+- Nunca mais de um por parágrafo, e nunca dois seguidos.
+- Combinam com você: 💗 ✨ 🌸 💧 ☀️ 🌿
+- Em assunto delicado (reação alérgica, gestação, pedido extraviado, dado
+  pessoal), use no máximo um, ou nenhum.
+
+FORMATO DO TEXTO — a interface mostra texto puro, então marcação vira sujeira na tela.
+- NUNCA use asterisco, cerquilha, sublinhado, crase, barra vertical ou traço
+  triplo. Nada de negrito, itálico, título, tabela ou bloco de código.
+- NUNCA desenhe tabela. Se precisar comparar itens, use uma linha por item.
+- Para listar, comece a linha com "- " e nada mais.
+- NUNCA escreva marcador de citação no meio da frase, como [1], (fonte 2) ou 【3】.
+- NUNCA escreva uma seção "Fontes" no fim. A interface já mostra, abaixo da sua
+  resposta, todos os trechos que você consultou. Repetir isso polui a leitura.
+
+COMO CITAR UM PRODUTO
+Uma linha por produto, exatamente neste formato:
+- Nome do produto, R$ 00,00, para pele tal (código LB-0000)
+Depois da lista, comente em uma frase por que aquilo serve para a pessoa.
 
 REGRA MAIS IMPORTANTE
 Responda EXCLUSIVAMENTE com base nos trechos de documento fornecidos abaixo.
@@ -37,14 +72,10 @@ Responda EXCLUSIVAMENTE com base nos trechos de documento fornecidos abaixo.
   (atendimento@luminabeauty.com.br ou WhatsApp (11) 4002-8922).
 - Não complete lacunas com conhecimento geral sobre cosméticos.
 
-CITAÇÃO DE FONTES
-Ao final da resposta, liste as fontes que você realmente usou, no formato:
-Fontes: [nome_do_arquivo — referência]
-Se não usou nenhum trecho, não invente fonte.
-
 RECOMENDAÇÃO DE PRODUTO
 - Cite nome, código e preço exatamente como aparecem no trecho.
 - Confira se o tipo de pele bate com o que a pessoa descreveu.
+- Respeite o limite de preço, se ela deu um.
 - Se o produto estiver esgotado, avise.
 - No máximo 3 produtos por resposta.
 
@@ -92,6 +123,62 @@ class RespostaAgente:
             "tempo_ms": self.tempo_ms,
             "tentativas": self.tentativas,
         }
+
+
+_LINHA_FONTES = re.compile(r"^\s*\**\s*fontes?\b\s*\**\s*:?\s*\**\s*$", re.IGNORECASE)
+_INICIO_FONTES = re.compile(r"^\s*\**\s*fontes?\b\s*\**\s*:", re.IGNORECASE)
+_SEPARADOR_TABELA = re.compile(r"^\s*\|[\s:|\-]+\|\s*$")
+_LINHA_TABELA = re.compile(r"^\s*\|(.+)\|\s*$")
+_REGRA_HORIZONTAL = re.compile(r"^\s*([-*_=])\1{2,}\s*$")
+
+_SUBSTITUICOES = [
+    (re.compile(r"\*\*(.+?)\*\*", re.DOTALL), r"\1"),      # negrito
+    (re.compile(r"(?<!\*)\*([^*\n]+?)\*(?!\*)"), r"\1"),   # itálico
+    (re.compile(r"__(.+?)__", re.DOTALL), r"\1"),
+    (re.compile(r"`+"), ""),                               # crase
+    (re.compile(r"^\s*#{1,6}\s*", re.MULTILINE), ""),      # título
+    (re.compile(r"【\d+】|\[\d+\]"), ""),                   # marcador de citação
+    # [^\S\n] cobre espaço, tabulação e o espaço não-quebrável (U+00A0) que os
+    # modelos emitem junto de "e-mail" e de marcadores de citação.
+    (re.compile(r"[^\S\n]{2,}"), " "),
+    (re.compile(r"[^\S\n]+([.,;:!?])"), r"\1"),            # espaço órfão deixado acima
+    (re.compile(r"\n{3,}"), "\n\n"),
+]
+
+
+def limpar_resposta(texto: str) -> str:
+    """Tira a marcação que o modelo insiste em produzir apesar do prompt.
+
+    O prompt pede texto puro, mas nenhum modelo obedece 100% das vezes, e um
+    asterisco perdido ou uma tabela em pipes viram sujeira na tela. Limpar aqui,
+    e não no frontend, mantém a API, a interface e os exemplos gerados
+    consistentes — quem consumir /api/perguntar recebe texto já apresentável.
+
+    O bloco de fontes é cortado por inteiro: a interface já lista os trechos
+    consultados em campo próprio, então repeti-los no corpo é ruído.
+    """
+    linhas = texto.splitlines()
+
+    # Corta do cabeçalho "Fontes" até o fim.
+    for indice, linha in enumerate(linhas):
+        if _LINHA_FONTES.match(linha) or _INICIO_FONTES.match(linha):
+            linhas = linhas[:indice]
+            break
+
+    saida: list[str] = []
+    for linha in linhas:
+        if _SEPARADOR_TABELA.match(linha) or _REGRA_HORIZONTAL.match(linha):
+            continue
+        tabela = _LINHA_TABELA.match(linha)
+        if tabela:
+            celulas = [c.strip() for c in tabela.group(1).split("|") if c.strip()]
+            linha = "- " + ", ".join(celulas)
+        saida.append(linha)
+
+    resultado = "\n".join(saida)
+    for padrao, troca in _SUBSTITUICOES:
+        resultado = padrao.sub(troca, resultado)
+    return resultado.strip()
 
 
 MENSAGEM_SEM_CONTEXTO = (
@@ -207,7 +294,7 @@ class AgenteAurora:
         ]
 
         return RespostaAgente(
-            resposta=texto.strip(),
+            resposta=limpar_resposta(texto),
             fontes=fontes,
             provedor=provedor,
             trechos_recuperados=len(resultados),
