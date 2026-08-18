@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aurora — Lumina Beauty</title>
+<style>
+  :root {
+    --roxo: #6b4e9b;
+    --roxo-claro: #8f6fc7;
+    --lilas: #ede7f6;
+    --rosa: #e8a0bf;
+    --fundo: #faf7fd;
+    --cartao: #ffffff;
+    --texto: #2b2b33;
+    --suave: #6f6b7d;
+    --borda: #e4dcf0;
+    --sombra: 0 2px 16px rgba(107, 78, 155, .09);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --lilas: #2a2338;
+      --fundo: #17141f;
+      --cartao: #1f1b2b;
+      --texto: #ece9f3;
+      --suave: #a49fb5;
+      --borda: #322a45;
+      --roxo: #b79ae8;
+      --roxo-claro: #9b7cd4;
+      --sombra: 0 2px 16px rgba(0, 0, 0, .35);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--fundo);
+    color: var(--texto);
+    line-height: 1.55;
+  }
+
+  header {
+    background: linear-gradient(120deg, var(--roxo) 0%, var(--roxo-claro) 60%, var(--rosa) 100%);
+    color: #fff;
+    padding: 22px 20px 26px;
+  }
+  .cabecalho { max-width: 860px; margin: 0 auto; }
+  .marca { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,.22);
+    display: grid; place-items: center;
+    font-size: 21px; flex-shrink: 0;
+  }
+  h1 { margin: 0; font-size: 1.28rem; font-weight: 650; letter-spacing: -.01em; }
+  .subtitulo { margin: 2px 0 0; font-size: .84rem; opacity: .92; }
+  .selos { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+  .selo {
+    background: rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.24);
+    padding: 3px 10px; border-radius: 20px;
+    font-size: .71rem; letter-spacing: .02em;
+  }
+
+  main { max-width: 860px; margin: 0 auto; padding: 20px 16px 130px; }
+
+  .exemplos { margin-bottom: 18px; }
+  .exemplos p { font-size: .78rem; color: var(--suave); margin: 0 0 8px; text-transform: uppercase; letter-spacing: .06em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    background: var(--cartao); border: 1px solid var(--borda);
+    color: var(--texto); border-radius: 18px;
+    padding: 7px 13px; font-size: .81rem; cursor: pointer;
+    transition: .16s; font-family: inherit; text-align: left;
+  }
+  .chip:hover { border-color: var(--roxo); color: var(--roxo); transform: translateY(-1px); }
+
+  .conversa { display: flex; flex-direction: column; gap: 14px; }
+  .turno { display: flex; gap: 10px; align-items: flex-start; }
+  .turno.cliente { flex-direction: row-reverse; }
+  .bolha {
+    background: var(--cartao); border: 1px solid var(--borda);
+    border-radius: 16px; padding: 13px 16px;
+    max-width: 82%; box-shadow: var(--sombra);
+    white-space: pre-wrap; word-wrap: break-word;
+  }
+  .turno.cliente .bolha {
+    background: var(--roxo); color: #fff; border-color: transparent;
+  }
+  .mini {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 15px; flex-shrink: 0;
+    background: var(--lilas); border: 1px solid var(--borda);
+  }
+
+  .fontes { margin-top: 11px; border-top: 1px dashed var(--borda); padding-top: 9px; }
+  .fontes summary {
+    cursor: pointer; font-size: .76rem; color: var(--roxo);
+    font-weight: 600; letter-spacing: .01em;
+  }
+  .fonte-item {
+    font-size: .74rem; color: var(--suave);
+    padding: 5px 0 5px 11px; border-left: 2px solid var(--lilas); margin-top: 6px;
+  }
+  .fonte-item b { color: var(--texto); font-weight: 600; }
+  .rodape-bolha {
+    margin-top: 8px; font-size: .7rem; color: var(--suave);
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .tag {
+    background: var(--lilas); color: var(--roxo);
+    padding: 1px 8px; border-radius: 10px; font-weight: 600;
+  }
+
+  .digitando span {
+    display: inline-block; width: 6px; height: 6px; margin-right: 3px;
+    background: var(--roxo); border-radius: 50%; animation: pulso 1.2s infinite;
+  }
+  .digitando span:nth-child(2) { animation-delay: .2s; }
+  .digitando span:nth-child(3) { animation-delay: .4s; }
+  @keyframes pulso { 0%, 60%, 100% { opacity: .25 } 30% { opacity: 1 } }
+
+  .barra {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--cartao); border-top: 1px solid var(--borda);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+  .barra-interna { max-width: 860px; margin: 0 auto; display: flex; gap: 9px; }
+  textarea {
+    flex: 1; resize: none; font-family: inherit; font-size: .93rem;
+    padding: 11px 14px; border-radius: 14px;
+    border: 1px solid var(--borda); background: var(--fundo); color: var(--texto);
+    max-height: 130px; line-height: 1.45;
+  }
+  textarea:focus { outline: 2px solid var(--roxo-claro); outline-offset: -1px; }
+  button.enviar {
+    background: var(--roxo); color: #fff; border: none;
+    border-radius: 14px; padding: 0 20px; font-size: .93rem;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  button.enviar:disabled { opacity: .45; cursor: not-allowed; }
+  .aviso {
+    max-width: 860px; margin: 9px auto 0; font-size: .69rem;
+    color: var(--suave); text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="cabecalho">
+    <div class="marca">
+      <div class="avatar">💜</div>
+      <div>
+        <h1>Aurora</h1>
+        <p class="subtitulo">Atendente virtual da Lumina Beauty</p>
+      </div>
+    </div>
+    <div class="selos">
+      <span class="selo" id="selo-trechos">carregando base…</span>
+      <span class="selo">PDF + CSV</span>
+      <span class="selo">respostas com fonte citada</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="exemplos">
+    <p>Experimente perguntar</p>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section class="conversa" id="conversa" aria-live="polite"></section>
+</main>
+
+<div class="barra">
+  <div class="barra-interna">
+    <textarea id="entrada" rows="1" placeholder="Pergunte sobre produtos, ingredientes, entrega, trocas…"></textarea>
+    <button class="enviar" id="enviar">Enviar</button>
+  </div>
+  <p class="aviso">Aurora responde apenas com base nos documentos da Lumina Beauty. Não substitui avaliação de dermatologista.</p>
+</div>
+
+<script>
+const conversa = document.getElementById('conversa');
+const entrada  = document.getElementById('entrada');
+const botao    = document.getElementById('enviar');
+const chips    = document.getElementById('chips');
+const historico = [];
+
+function escapar(texto) {
+  const d = document.createElement('div');
+  d.textContent = texto;
+  return d.innerHTML;
+}
+
+function adicionarTurno(papel, texto) {
+  const turno = document.createElement('div');
+  turno.className = 'turno ' + papel;
+  const mini = document.createElement('div');
+  mini.className = 'mini';
+  mini.textContent = papel === 'cliente' ? '🙋‍♀️' : '💜';
+  const bolha = document.createElement('div');
+  bolha.className = 'bolha';
+  bolha.innerHTML = escapar(texto);
+  turno.append(mini, bolha);
+  conversa.appendChild(turno);
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  return bolha;
+}
+
+function renderizarFontes(bolha, dados) {
+  if (dados.fontes && dados.fontes.length) {
+    const bloco = document.createElement('details');
+    bloco.className = 'fontes';
+    const titulo = document.createElement('summary');
+    titulo.textContent = `📄 ${dados.fontes.length} trecho(s) consultado(s)`;
+    bloco.appendChild(titulo);
+    dados.fontes.forEach(f => {
+      const item = document.createElement('div');
+      item.className = 'fonte-item';
+      item.innerHTML = `<b>${escapar(f.documento)}</b><br>${escapar(f.referencia)} · relevância ${f.pontuacao}`;
+      bloco.appendChild(item);
+    });
+    bolha.appendChild(bloco);
+  }
+  const rodape = document.createElement('div');
+  rodape.className = 'rodape-bolha';
+  rodape.innerHTML = `<span class="tag">${escapar(dados.provedor)}</span><span>${dados.tempo_ms} ms</span>`;
+  bolha.appendChild(rodape);
+}
+
+async function perguntar(texto) {
+  if (!texto.trim()) return;
+  adicionarTurno('cliente', texto);
+  historico.push({ papel: 'cliente', texto });
+  entrada.value = '';
+  entrada.style.height = 'auto';
+  botao.disabled = true;
+
+  const bolha = adicionarTurno('aurora', '');
+  bolha.innerHTML = '<div class="digitando"><span></span><span></span><span></span></div>';
+
+  try {
+    const resposta = await fetch('/api/perguntar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pergunta: texto, historico: historico.slice(0, -1) })
+    });
+    if (!resposta.ok) throw new Error('HTTP ' + resposta.status);
+    const dados = await resposta.json();
+    bolha.innerHTML = escapar(dados.resposta);
+    renderizarFontes(bolha, dados);
+    historico.push({ papel: 'aurora', texto: dados.resposta });
+  } catch (erro) {
+    bolha.innerHTML = escapar('Não consegui falar com o servidor agora. Detalhe: ' + erro.message);
+  } finally {
+    botao.disabled = false;
+    entrada.focus();
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+}
+
+botao.addEventListener('click', () => perguntar(entrada.value));
+entrada.addEventListener('keydown', evento => {
+  if (evento.key === 'Enter' && !evento.shiftKey) {
+    evento.preventDefault();
+    perguntar(entrada.value);
+  }
+});
+entrada.addEventListener('input', () => {
+  entrada.style.height = 'auto';
+  entrada.style.height = Math.min(entrada.scrollHeight, 130) + 'px';
+});
+
+fetch('/api/exemplos')
+  .then(r => r.json())
+  .then(d => {
+    d.exemplos.slice(0, 6).forEach(texto => {
+      const chip = document.createElement('button');
+      chip.className = 'chip';
+      chip.textContent = texto;
+      chip.onclick = () => perguntar(texto);
+      chips.appendChild(chip);
+    });
+  })
+  .catch(() => { chips.innerHTML = ''; });
+
+fetch('/api/saude')
+  .then(r => r.json())
+  .then(d => {
+    const docs = Object.keys(d.documentos || {}).length;
+    document.getElementById('selo-trechos').textContent =
+      `${d.trechos_indexados} trechos · ${docs} documentos`;
+  })
+  .catch(() => {
+    document.getElementById('selo-trechos').textContent = 'base offline';
+  });
+
+adicionarTurno('aurora',
+  'Oi! Eu sou a Aurora, atendente da Lumina Beauty. 💜\n\n' +
+  'Respondo sobre nosso catálogo, ingredientes cosméticos, combinação de ativos, ' +
+  'prazos de entrega, trocas, devoluções e privacidade — sempre citando de qual ' +
+  'documento tirei a informação.\n\nO que você quer saber?');
+</script>
+</body>
+</html>
