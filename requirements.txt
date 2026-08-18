@@ -1,0 +1,13 @@
+# --- API ---
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.9.0
+python-dotenv>=1.0.1
+
+# --- leitura dos documentos-fonte ---
+pypdf>=5.1.0            # extração de texto do PDF de políticas
+reportlab>=4.2.0        # geração do PDF a partir do markdown-fonte
+
+# --- provedores de LLM ---
+httpx>=0.27.0           # provedores de reserva (Groq, Gemini) via REST
+oci>=2.134.0            # OCI Generative AI — provedor principal

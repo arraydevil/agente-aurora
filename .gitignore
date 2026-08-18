@@ -1,0 +1,21 @@
+# Segredos
+.env
+.env.local
+*.pem
+.oci/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Sistema operacional / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
