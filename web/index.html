@@ -133,10 +133,28 @@
     max-width: 84%;
     box-shadow: var(--sombra);
     backdrop-filter: blur(9px);
-    white-space: pre-wrap;
     word-wrap: break-word;
     font-size: .92rem;
   }
+
+  .bolha .par { margin: 0 0 11px; }
+  .bolha .par:last-child { margin-bottom: 0; }
+
+  .bolha .item {
+    position: relative;
+    margin: 0 0 8px;
+    padding-left: 17px;
+  }
+  .bolha .item:last-child { margin-bottom: 0; }
+  .bolha .item::before {
+    content: "";
+    position: absolute;
+    left: 3px; top: .68em;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--acento-claro);
+  }
+  .turno.cliente .bolha .item::before { background: rgba(255, 255, 255, .75); }
   .turno.cliente .bolha {
     background: linear-gradient(135deg, var(--acento-claro), var(--acento));
     color: #fff;
@@ -274,6 +292,56 @@ function escapar(texto) {
   return d.innerHTML;
 }
 
+// Rede de segurança: o prompt já pede texto puro, mas modelo de linguagem
+// escorrega. Sem isto, um "**" perdido aparece literal na tela.
+function limparMarcacao(texto) {
+  return texto
+    .replace(/^\s*\|[\s:|-]+\|\s*$/gm, '')        // linha separadora de tabela
+    .replace(/^\s*\|(.+)\|\s*$/gm, (_, linha) =>  // linha de tabela vira texto
+      linha.split('|').map(c => c.trim()).filter(Boolean).join(' · '))
+    .replace(/\*\*(.+?)\*\*/g, '$1')              // negrito
+    .replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '$1')// itálico
+    .replace(/__(.+?)__/g, '$1')
+    .replace(/`+/g, '')                           // crase
+    .replace(/^\s*#{1,6}\s*/gm, '')               // título
+    .replace(/^\s*([-*_=])\1{2,}\s*$/gm, '')      // linha horizontal
+    .replace(/【\d+】|\[\d+\]/g, '')               // marcador de citação
+    .replace(/^\s*Fontes?\s*:.*$/gim, '')         // seção de fontes duplicada
+    .replace(/[ \t]{2,}/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function preencherBolha(bolha, texto) {
+  bolha.textContent = '';
+  let paragrafo = [];
+
+  const soltarParagrafo = () => {
+    if (!paragrafo.length) return;
+    const p = document.createElement('p');
+    p.className = 'par';
+    p.textContent = paragrafo.join(' ');
+    bolha.appendChild(p);
+    paragrafo = [];
+  };
+
+  limparMarcacao(texto).split('\n').forEach(linha => {
+    const conteudo = linha.trim();
+    if (!conteudo) { soltarParagrafo(); return; }
+    if (/^[-•–]\s+/.test(conteudo)) {
+      soltarParagrafo();
+      const item = document.createElement('div');
+      item.className = 'item';
+      item.textContent = conteudo.replace(/^[-•–]\s+/, '');
+      bolha.appendChild(item);
+    } else {
+      paragrafo.push(conteudo);
+    }
+  });
+
+  soltarParagrafo();
+}
+
 function adicionarTurno(papel, texto) {
   const turno = document.createElement('div');
   turno.className = 'turno ' + papel;
@@ -283,7 +351,7 @@ function adicionarTurno(papel, texto) {
 
   const bolha = document.createElement('div');
   bolha.className = 'bolha';
-  bolha.innerHTML = escapar(texto);
+  preencherBolha(bolha, texto);
 
   turno.append(orbe, bolha);
   conversa.appendChild(turno);
@@ -331,11 +399,11 @@ async function perguntar(texto) {
     });
     if (!resposta.ok) throw new Error('HTTP ' + resposta.status);
     const dados = await resposta.json();
-    bolha.innerHTML = escapar(dados.resposta);
+    preencherBolha(bolha, dados.resposta);
     renderizarFontes(bolha, dados);
     historico.push({ papel: 'aurora', texto: dados.resposta });
   } catch (erro) {
-    bolha.innerHTML = escapar('Não consegui falar com o servidor agora. Detalhe: ' + erro.message);
+    preencherBolha(bolha, 'Não consegui falar com o servidor agora. Detalhe: ' + erro.message);
   } finally {
     botao.disabled = false;
     entrada.focus();
