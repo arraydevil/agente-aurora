@@ -147,22 +147,32 @@ class IndiceBM25:
             for termo, df in frequencia_documental.items()
         }
 
-    def _pontuar(self, indice: int, termos: set[str]) -> tuple[float, int]:
-        """Devolve a pontuacao BM25 e quantos termos distintos da consulta bateram."""
+        # Nomes próprios do domínio: INCI, nome popular do ingrediente, nome e
+        # código de produto. Servem para distinguir um termo que identifica uma
+        # entidade da base de uma palavra qualquer que aparece na prosa.
+        self.termos_entidade: set[str] = set()
+        for trecho in trechos:
+            for campo in ("inci", "nome_popular", "nome", "codigo"):
+                valor = trecho.metadados.get(campo)
+                if isinstance(valor, str):
+                    self.termos_entidade.update(tokenizar(valor))
+
+    def _pontuar(self, indice: int, termos: set[str]) -> tuple[float, set[str]]:
+        """Devolve a pontuacao BM25 e quais termos da consulta bateram."""
         contagem = self.documentos[indice]
         tamanho = self.tamanhos[indice] or 1
         pontuacao = 0.0
-        acertos = 0
+        casados: set[str] = set()
         for termo in termos:
             frequencia = contagem.get(termo)
             if not frequencia:
                 continue
-            acertos += 1
+            casados.add(termo)
             idf = self.idf.get(termo, 0.0)
             numerador = frequencia * (K1 + 1)
             denominador = frequencia + K1 * (1 - B + B * tamanho / (self.tamanho_medio or 1))
             pontuacao += idf * numerador / denominador
-        return pontuacao, acertos
+        return pontuacao, casados
 
     def buscar(
         self,
@@ -175,17 +185,23 @@ class IndiceBM25:
         if not termos:
             return []
 
-        # Um único termo em comum não caracteriza relevância: a palavra "hoje"
-        # aparece por acaso em uma ficha de ingrediente e não torna aquele
-        # trecho uma resposta para "qual a escalação do time hoje". Exigir dois
-        # termos distintos derruba esse tipo de falso positivo sem prejudicar
-        # buscas legítimas de uma palavra só ("niacinamida").
+        # Um único termo em comum normalmente não caracteriza relevância: a
+        # palavra "hoje" aparece por acaso na ficha da oxibenzona e não torna
+        # aquele trecho uma resposta para "qual a escalação do time hoje".
+        #
+        # A exceção é o termo que nomeia uma entidade da base. Em "o que é
+        # niacinamida e para que serve", só "niacinamida" existe no índice —
+        # "serve" não aparece em documento nenhum, então exigir dois acertos
+        # tornaria a pergunta impossível de responder. Um acerto em nome de
+        # ingrediente ou de produto é evidência suficiente por si só.
         acertos_minimos = min(2, len(termos))
 
         brutos: list[Resultado] = []
         for i in range(self.total):
-            pontuacao, acertos = self._pontuar(i, termos)
-            if acertos >= acertos_minimos and pontuacao >= pontuacao_minima:
+            pontuacao, casados = self._pontuar(i, termos)
+            if pontuacao < pontuacao_minima:
+                continue
+            if len(casados) >= acertos_minimos or (casados & self.termos_entidade):
                 brutos.append(Resultado(self.trechos[i], pontuacao))
         brutos.sort(key=lambda r: r.pontuacao, reverse=True)
 
