@@ -29,7 +29,7 @@ noite?"* ou *"esse sérum é seguro na gestação?"*.
 - [Exemplos de perguntas](#exemplos-de-perguntas)
 - [Exemplos de respostas](#exemplos-de-respostas)
 - [Testes](#testes)
-- [Deploy na Oracle Cloud Infrastructure](#deploy-na-oracle-cloud-infrastructure)
+- [Deploy](#deploy)
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Decisões de projeto](#decisões-de-projeto)
 - [Limitações conhecidas](#limitações-conhecidas)
@@ -79,9 +79,9 @@ versionados — e se recusa a responder o que não estiver neles.
               └─────────────┬─────────┘   └─────────┬──────────────┘
                             │                       │
               ┌─────────────▼─────────┐   ┌─────────▼──────────────┐
-              │  Ingestão de          │   │ 1. OCI Generative AI   │
-              │  documentos           │   │ 2. Groq   (reserva)    │
-              │  app/ingestao.py      │   │ 3. Gemini (reserva)    │
+              │  Ingestão de          │   │ 1. Groq                │
+              │  documentos           │   │ 2. Gemini   (reserva)  │
+              │  app/ingestao.py      │   │ 3. OCI GenAI (opcional)│
               └─────────────┬─────────┘   │ 4. Extrativo (sem LLM) │
                             │             └────────────────────────┘
        ┌────────────────────┼────────────────────┐
@@ -107,8 +107,8 @@ versionados — e se recusa a responder o que não estiver neles.
    **sem chamar o LLM**. Isso evita alucinação e economiza chamada.
 5. Os trechos recuperados viram um prompt ancorado, com instrução explícita de
    usar somente aquele conteúdo.
-6. O **roteador de LLM** chama a OCI Generative AI. Se falhar, desce para o
-   próximo provedor sem derrubar a requisição.
+6. O **roteador de LLM** chama o provedor configurado. Se falhar, desce para o
+   próximo da lista sem derrubar a requisição.
 7. A resposta passa pela limpeza de marcação e volta com a lista de trechos
    consultados, o provedor que respondeu e o tempo de processamento.
 
@@ -246,12 +246,13 @@ trechos recuperados. A aplicação nunca fica muda em uma apresentação.
 | Leitura de PDF | pypdf | Extração de texto página a página |
 | Geração de PDF | ReportLab | Constrói o PDF a partir do markdown-fonte |
 | Recuperação | BM25 Okapi (implementação própria) | Qualidade sem dependência pesada |
-| LLM principal | **OCI Generative AI** (`meta.llama-3.3-70b-instruct`) | Requisito do desafio |
-| LLM de reserva | Groq · Google Gemini | Continuidade da demonstração |
+| LLM em produção | **Groq** (`openai/gpt-oss-120b`) | Latência baixa e nível gratuito generoso |
+| LLM alternativos | Google Gemini · OCI Generative AI | Roteador com provedores intercambiáveis |
 | Cliente HTTP | httpx | Chamadas REST aos provedores de reserva |
 | Frontend | HTML, CSS e JavaScript sem framework | Zero build, um arquivo, tema claro e escuro |
 | Testes | pytest | 64 testes de ingestão, recuperação, limpeza e resposta |
-| Empacotamento | Docker | Mesma imagem na máquina local e na VM da OCI |
+| Hospedagem | AWS App Runner | Build na nuvem a partir do GitHub, HTTPS automático |
+| Empacotamento | Docker | Mesma imagem em qualquer nuvem ou na máquina local |
 
 ---
 
@@ -280,19 +281,44 @@ pip install -r requirements.txt
 cp .env.example .env             # Windows: copy .env.example .env
 ```
 
-Abra o `.env` e preencha ao menos um provedor. Para usar a **OCI Generative AI**:
+Abra o `.env` e preencha ao menos um provedor. O caminho mais curto é a **Groq**,
+cuja chave sai em um minuto em <https://console.groq.com/keys>, sem cartão:
 
 ```env
-PROVEDORES_LLM=oci,groq,gemini
+PROVEDORES_LLM=groq,gemini
+GROQ_API_KEY=gsk_sua_chave_aqui
+GROQ_MODEL=openai/gpt-oss-120b
+```
+
+> Groq e Google aposentam modelos com frequência, e a chamada passa a devolver
+> `404`. Para ver os que a sua conta tem ativos:
+> ```bash
+> curl -H "Authorization: Bearer $GROQ_API_KEY" https://api.groq.com/openai/v1/models
+> ```
+
+<details>
+<summary>Usar a OCI Generative AI</summary>
+
+O SDK da OCI é opcional e não vem no `requirements.txt`:
+
+```bash
+pip install -r requirements-oci.txt
+```
+
+```env
+PROVEDORES_LLM=oci,groq
 OCI_COMPARTMENT_ID=ocid1.compartment.oc1..xxxxx
 OCI_REGION=sa-saopaulo-1
 OCI_GENAI_MODEL_ID=meta.llama-3.3-70b-instruct
 OCI_AUTH=config
 ```
 
-Localmente a autenticação usa o `~/.oci/config` gerado pelo `oci setup config`.
-Na VM da OCI, troque para `OCI_AUTH=instance_principal` — a instância se
-autentica pela própria identidade, e nenhuma chave privada vai para o servidor.
+Na sua máquina, a autenticação usa o `~/.oci/config` gerado pelo
+`oci setup config`. Em uma VM da OCI, troque para
+`OCI_AUTH=instance_principal` — a instância se autentica pela própria
+identidade, e nenhuma chave privada vai para o servidor.
+
+</details>
 
 > Sem nenhum provedor configurado a aplicação **sobe do mesmo jeito** e responde
 > em modo extrativo, devolvendo os trechos recuperados dos documentos.
@@ -442,13 +468,13 @@ desenvolvimento, e não teste escrito por obrigação:
 
 ---
 
-## Deploy na Oracle Cloud Infrastructure
+## Deploy
 
-O passo a passo completo está em **[`docs/deploy-oci.md`](docs/deploy-oci.md)**:
-criação da VM Always Free (`VM.Standard.A1.Flex`, ARM), regra de entrada na
-security list, liberação no firewall da instância, instalação do Docker,
-configuração de *instance principal* para acessar a Generative AI sem chave em
-disco, e o Caddy como proxy reverso com HTTPS automático.
+A aplicação roda no **AWS App Runner**, implantada a partir do código-fonte no
+GitHub: o App Runner constrói na nuvem, publica com URL HTTPS e reimplanta a
+cada `git push` na `main`.
+
+Passo a passo completo em **[`docs/deploy-aws.md`](docs/deploy-aws.md)**.
 
 ### Evidência do deploy
 
@@ -456,6 +482,25 @@ disco, e o Caddy como proxy reverso com HTTPS automático.
 |---|---|
 | **URL pública** | _preencher após o deploy_ |
 | **Captura de tela** | `docs/evidencia-deploy.png` |
+
+### Por que não foi a Oracle Cloud
+
+O projeto foi arquitetado para a OCI, que é a nuvem pedida pelo desafio. O
+provedor `app/llm/oci_genai.py` está implementado, com suporte a autenticação
+por *instance principal*, e o guia de implantação continua no repositório em
+[`docs/deploy-oci.md`](docs/deploy-oci.md) — VM Always Free ARM, security list,
+firewall da instância, grupo dinâmico e policy para a Generative AI.
+
+O que faltou não foi código: **a criação da conta foi barrada na verificação de
+identidade da Oracle**, que exige cartão de crédito. Sem conta, não há
+implantação. A alternativa foi subir na AWS.
+
+A migração custou poucos commits, e é justamente aí que a arquitetura se paga: a
+camada de LLM é um roteador de provedores intercambiáveis, então trocar de nuvem
+não exigiu tocar no agente, na ingestão nem na recuperação. O SDK da OCI saiu do
+`requirements.txt` — são mais de 100 MB para um provedor inativo — e ficou em
+`requirements-oci.txt`, opcional. Como o import é preguiçoso, sem o pacote o
+provedor apenas se declara indisponível e o roteador segue adiante.
 
 ---
 
@@ -506,9 +551,15 @@ externa a mais no caminho de cada pergunta. BM25 é determinístico, roda em
 milissegundos, cabe na VM Always Free e é auditável — dá para explicar
 exatamente por que um trecho foi escolhido.
 
-**Fallback em cascata entre provedores.** O requisito é usar a OCI, mas uma
-demonstração que morre porque um serviço externo oscilou não demonstra nada. A
-cascata mantém a OCI como padrão e preserva a apresentação.
+**Fallback em cascata entre provedores.** Uma demonstração que morre porque um
+serviço externo oscilou não demonstra nada. A cascata tenta cada provedor
+configurado e, no último degrau, responde com os próprios trechos recuperados,
+sem LLM nenhum.
+
+Essa decisão se pagou de forma inesperada: quando a conta da Oracle foi negada,
+mudar de nuvem e de provedor de inferência custou alterar uma lista no `.env` e
+acrescentar um arquivo de deploy. O agente, a ingestão e a recuperação não foram
+tocados.
 
 **Recusa explícita.** Quando nada passa do limiar, o agente responde que não
 sabe **antes** de chamar o LLM. Um agente que responde tudo é um agente em que
