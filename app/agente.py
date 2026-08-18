@@ -181,6 +181,77 @@ def limpar_resposta(texto: str) -> str:
     return resultado.strip()
 
 
+# --------------------------------------------------------------- conversa social
+#
+# "Olá" não é pergunta de conhecimento. Sem este desvio, a saudação cai na
+# guarda de escopo e a cliente é recebida com "não encontrei essa informação
+# nos documentos" — tecnicamente correto, péssimo como acolhimento.
+#
+# Resolver aqui, e não mandando para o LLM, tem duas vantagens: a resposta é
+# instantânea e não gasta chamada, e não há margem para o modelo inventar
+# horário de atendimento ou promessa que a loja não faz.
+
+_PADROES_SOCIAIS: list[tuple[str, re.Pattern[str]]] = [
+    (
+        "saudacao",
+        re.compile(
+            r"\b(oi+|ol[aá]+|al[oô]+|opa|eae|e a[ií]|hey|hello|hi|"
+            r"bom dia|boa tarde|boa noite|tudo bem|tudo bom|td bem|blz|beleza|"
+            r"como vai|como voc[eê] est[aá])\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "agradecimento",
+        re.compile(r"\b(obrigad[ao]|brigad[ao]|valeu|vlw|agrade[çc]o|gratid[ãa]o)\b", re.IGNORECASE),
+    ),
+    (
+        "despedida",
+        re.compile(r"\b(tchau|xau|at[ée] (mais|logo|breve)|falou|flw|adeus|bye)\b", re.IGNORECASE),
+    ),
+]
+
+RESPOSTAS_SOCIAIS = {
+    "saudacao": (
+        "Oi! Que bom ter você por aqui. 💗\n\n"
+        "Posso te ajudar com o catálogo da Lumina, ingredientes cosméticos, "
+        "combinação de ativos, prazos de entrega, trocas e devoluções ou "
+        "privacidade dos seus dados.\n\n"
+        "O que você quer saber?"
+    ),
+    "agradecimento": (
+        "Imagina, foi um prazer te ajudar. 🌸\n\n"
+        "Se pintar outra dúvida sobre produto, ingrediente ou pedido, é só me chamar."
+    ),
+    "despedida": (
+        "Até logo! Cuide bem da sua pele. ☀️\n\n"
+        "Quando precisar, estou por aqui."
+    ),
+}
+
+
+def detectar_intencao_social(pergunta: str) -> str | None:
+    """Identifica cumprimento, agradecimento ou despedida sem conteúdo de consulta.
+
+    Só vale quando a mensagem é *apenas* social: "bom dia, qual o prazo de
+    entrega?" precisa seguir para a busca normalmente. Por isso removemos a
+    expressão social e checamos se sobrou pergunta de verdade.
+    """
+    texto = pergunta.strip()
+    if not texto or len(texto) > 80:
+        return None
+
+    for intencao, padrao in _PADROES_SOCIAIS:
+        if not padrao.search(texto):
+            continue
+        resto = padrao.sub(" ", texto)
+        resto = re.sub(r"[^\w\s]", " ", resto, flags=re.UNICODE)
+        palavras = [p for p in resto.split() if len(p) > 1]
+        if len(palavras) <= 1:  # tolera "aurora", "gente", "moça"
+            return intencao
+    return None
+
+
 MENSAGEM_SEM_CONTEXTO = (
     "Não encontrei essa informação nos documentos da Lumina Beauty. "
     "Consigo ajudar com produtos do catálogo, ingredientes, prazos de entrega, "
@@ -238,7 +309,15 @@ class AgenteAurora:
 
         if not pergunta:
             return RespostaAgente(
-                resposta="Me conta o que você precisa que eu te ajudo. 💜",
+                resposta="Me conta o que você precisa que eu te ajudo. 💗",
+                tempo_ms=int((time.perf_counter() - inicio) * 1000),
+            )
+
+        intencao = detectar_intencao_social(pergunta)
+        if intencao is not None:
+            return RespostaAgente(
+                resposta=RESPOSTAS_SOCIAIS[intencao],
+                provedor=intencao,
                 tempo_ms=int((time.perf_counter() - inicio) * 1000),
             )
 
