@@ -96,16 +96,21 @@ versionados — e se recusa a responder o que não estiver neles.
 ### Fluxo de uma pergunta
 
 1. A cliente envia a pergunta pela interface web ou pela API.
-2. O **índice BM25** pontua os 208 trechos indexados e devolve os 6 mais
+2. Se a mensagem for **apenas social** — "olá", "obrigada", "tchau" — a Aurora
+   responde na hora, sem busca e sem chamar o LLM. Sem esse desvio, um "olá"
+   caía na guarda de escopo e era recebido com *"não encontrei essa informação
+   nos documentos"*. Mensagem que mistura cumprimento e pergunta de verdade
+   ("bom dia, qual o prazo de entrega?") segue o fluxo normal.
+3. O **índice BM25** pontua os 208 trechos indexados e devolve os 6 mais
    relevantes, com limite por documento para garantir diversidade de fonte.
-3. Se nada passar do limiar de relevância, o agente responde que não sabe —
+4. Se nada passar do limiar de relevância, o agente responde que não sabe —
    **sem chamar o LLM**. Isso evita alucinação e economiza chamada.
-4. Os trechos recuperados viram um prompt ancorado, com instrução explícita de
+5. Os trechos recuperados viram um prompt ancorado, com instrução explícita de
    usar somente aquele conteúdo.
-5. O **roteador de LLM** chama a OCI Generative AI. Se falhar, desce para o
+6. O **roteador de LLM** chama a OCI Generative AI. Se falhar, desce para o
    próximo provedor sem derrubar a requisição.
-6. A resposta volta com a lista de trechos consultados, o provedor que respondeu
-   e o tempo de processamento.
+7. A resposta passa pela limpeza de marcação e volta com a lista de trechos
+   consultados, o provedor que respondeu e o tempo de processamento.
 
 ---
 
@@ -245,7 +250,7 @@ trechos recuperados. A aplicação nunca fica muda em uma apresentação.
 | LLM de reserva | Groq · Google Gemini | Continuidade da demonstração |
 | Cliente HTTP | httpx | Chamadas REST aos provedores de reserva |
 | Frontend | HTML, CSS e JavaScript sem framework | Zero build, um arquivo, tema claro e escuro |
-| Testes | pytest | 28 testes de ingestão, recuperação e resposta |
+| Testes | pytest | 64 testes de ingestão, recuperação, limpeza e resposta |
 | Empacotamento | Docker | Mesma imagem na máquina local e na VM da OCI |
 
 ---
@@ -413,7 +418,7 @@ python scripts/gerar_exemplos.py
 pytest -q
 ```
 
-28 testes cobrindo:
+64 testes cobrindo:
 
 - extração do PDF, com verificação de que valores críticos sobrevivem
   (`7 dias corridos`, `R$ 199,00`, `LGPD`, `peróxido de benzoíla`);
@@ -424,9 +429,16 @@ pytest -q
 - limite por documento;
 - resposta do agente com fontes, inclusive sem nenhum LLM configurado.
 
-`testes/test_entidades.py` é a regressão dos dois defeitos de recuperação
-descritos acima — a palavra solta que trazia trecho irrelevante, e a busca por
-nome de ingrediente que parou de funcionar quando o primeiro foi corrigido.
+Três arquivos são regressão de defeitos reais encontrados durante o
+desenvolvimento, e não teste escrito por obrigação:
+
+- `test_entidades.py` — a palavra solta que trazia trecho irrelevante, e a busca
+  por nome de ingrediente que parou de funcionar quando o primeiro foi corrigido.
+- `test_limpeza.py` — tabela em pipes e bloco "Fontes" aparecendo literais na
+  tela, incluindo o caso de não confundir "nossas **fontes** de vitamina C" com
+  um cabeçalho de fontes.
+- `test_social.py` — "olá" sendo recebido com *"não encontrei essa informação
+  nos documentos"*.
 
 ---
 
@@ -473,7 +485,11 @@ agente-aurora/
 │   ├── gerar_glossario_csv.py
 │   └── gerar_exemplos.py
 ├── web/index.html            interface de chat
-├── testes/test_pipeline.py   19 testes
+├── testes/
+│   ├── test_pipeline.py      ingestão, recuperação e resposta
+│   ├── test_entidades.py     cobertura mínima e nomes de entidade
+│   ├── test_limpeza.py       remoção de marcação das respostas
+│   └── test_social.py        saudação, agradecimento e despedida
 ├── docs/deploy-oci.md        guia de implantação
 ├── Dockerfile
 ├── requirements.txt
