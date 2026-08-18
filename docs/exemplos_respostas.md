@@ -1,6 +1,6 @@
 # Exemplos de respostas geradas pela Aurora
 
-Gerado automaticamente por `scripts/gerar_exemplos.py` em 18/08/2026 às 18:00.
+Gerado automaticamente por `scripts/gerar_exemplos.py` em 18/08/2026 às 18:21.
 
 Base indexada no momento da geração: **208 trechos** de 3 documentos (`politicas_lumina.pdf`, `catalogo_produtos.csv`, `glossario_ingredientes.csv`).
 
@@ -8,22 +8,15 @@ Base indexada no momento da geração: **208 trechos** de 3 documentos (`politic
 
 ## 1. Estou grávida, quais ativos do catálogo eu posso usar?
 
-Nenhum dos produtos listados no catálogo pode ser usado durante a gestação. Todos os itens que contêm retinoides ou ácido salicílico têm a informação de **“contraindicado na gestação e na amamentação”**【1 — catalogo_produtos.csv — produto LB-0009, linha 10】【2 — catalogo_produtos.csv — produto LB-0004, linha 5】【3 — catalogo_produtos.csv — produto LB-0005, linha 6】【4 — catalogo_produtos.csv — produto LB-0006, linha 7】.
+Parabéns pela gravidez! 🌸 Entendo que você quer usar apenas ativos seguros para a sua pele.
 
-O único ativo que o documento indica como liberado para uso na gestação é o **Ácido Azelaico**【6 — glossario_ingredientes.csv — linha 39】. Contudo, nenhum dos produtos do catálogo que temos aqui contém esse ingrediente.
+Nos produtos do nosso catálogo, o ácido salicílico (LB‑0009), o retinol (LB‑0004), o retinal (LB‑0005) e o Granactive Retinoid (LB‑0006) têm contraindicação para gestantes, portanto não são recomendados.
 
-Portanto, até que encontremos um produto com ácido azelaico ou outro ativo aprovado, a recomendação é evitar os itens citados e consultar sua dermatologista para escolher uma opção segura.
+O ingrediente ácido azelaico é indicado como de uso tranquilo na gestação, porém nenhum dos itens listados contém esse ativo.
 
-Caso precise de mais informações ou queira ajuda para encontrar um produto adequado, entre em contato com nosso atendimento humano pelo e‑mail atendimento@luminabeauty.com.br ou pelo WhatsApp (11) 4002‑8922.
+Se precisar de ajuda para encontrar opções adequadas, entre em contato com nosso atendimento humano pelo e‑mail atendimento@luminabeauty.com.br ou WhatsApp (11) 4002‑8922. 💗
 
-**Fontes:**  
-[1 — catalogo_produtos.csv — produto LB-0009, linha 10]  
-[2 — catalogo_produtos.csv — produto LB-0004, linha 5]  
-[3 — catalogo_produtos.csv — produto LB-0005, linha 6]  
-[4 — catalogo_produtos.csv — produto LB-0006, linha 7]  
-[6 — glossario_ingredientes.csv — linha 39]
-
-<sub>Provedor: `groq` · 6 trechos recuperados · 2391 ms</sub>
+<sub>Provedor: `groq` · 6 trechos recuperados · 3182 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
@@ -40,28 +33,22 @@ Caso precise de mais informações ou queira ajuda para encontrar um produto ade
 
 ## 2. Qual protetor solar vocês têm para pele oleosa até R$ 120?
 
-**Opções de protetor solar para pele oleosa (até R$ 120):**
+Oi! Separamos duas opções de protetor solar que são leves, não comedogênicos e perfeitos para pele oleosa, tudo dentro do seu limite de R$ 120. ✨
 
-| Código | Produto | Tipo | FPS | Preço | Indicação de pele |
-|--------|---------|------|-----|-------|-------------------|
-| LB‑0201 | Protetor Solar Facial FPS 60 Toque Seco (Lumina Sun) | Facial | 60 | R$ 109,90 | Oleosa, mista, acneica – não comedogênico |
-| LB‑0204 | Protetor Solar Corporal FPS 50 Spray (Lumina Sun) | Corporal | 50 | R$ 89,90 | Todas as peles, inclusive oleosa |
+- Protetor Solar Facial FPS 60 Toque Seco, R$ 109,90, para pele oleosa (código LB-0201) 
+- Protetor Solar Corporal FPS 50 Spray, R$ 89,90, para pele oleosa (código LB-0204)
 
-Ambos contêm **Ethylhexyl Triazone**, um filtro solar potente e leve indicado para pele oleosa, com comedogenicidade 0/5, garantindo toque seco e sem obstruir os poros.
+Ambos dão alta proteção, têm textura que não deixa a pele brilhando e são veganos, então você pode usar no dia a dia ou na praia sem preocupação. 💧
 
-Caso queira mais detalhes ou outro tipo de produto, entre em contato pelo e‑mail **atendimento@luminabeauty.com.br** ou pelo WhatsApp **(11) 4002‑8922**.  
-
-Fontes: [3] — catalogo_produtos.csv; [4] — catalogo_produtos.csv.
-
-<sub>Provedor: `groq` · 6 trechos recuperados · 1676 ms</sub>
+<sub>Provedor: `groq` · 6 trechos recuperados · 2207 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
-- `glossario_ingredientes.csv` — ingrediente Ethylhexyl Triazone, linha 104 (relevância 10.674065933317824)
-- `glossario_ingredientes.csv` — ingrediente Zinc PCA, linha 46 (relevância 10.299594996060007)
+- `glossario_ingredientes.csv` — ingrediente Ethylhexyl Triazone, linha 104 (relevância 10.674065933317822)
+- `glossario_ingredientes.csv` — ingrediente Zinc PCA, linha 46 (relevância 10.299594996060005)
 - `catalogo_produtos.csv` — produto LB-0201, linha 24 (relevância 9.770252087278497)
 - `catalogo_produtos.csv` — produto LB-0204, linha 27 (relevância 9.18367927414528)
-- `glossario_ingredientes.csv` — ingrediente Bis-Ethylhexyloxyphenol Methoxyphenyl Triazine, linha 102 (relevância 9.104111766191712)
+- `glossario_ingredientes.csv` — ingrediente Bis-Ethylhexyloxyphenol Methoxyphenyl Triazine, linha 102 (relevância 9.104111766191714)
 - `catalogo_produtos.csv` — produto LB-0202, linha 25 (relevância 9.027763484037353)
 
 </details>
@@ -70,22 +57,20 @@ Fontes: [3] — catalogo_produtos.csv; [4] — catalogo_produtos.csv.
 
 ## 3. Posso usar retinol e ácido glicólico na mesma noite?
 
-Não. Retinol (um retinoide) e ácido glicólico (um AHA) na mesma aplicação aumentam muito a irritação e podem romper a barreira cutânea. O ideal é alternar as noites: em uma noite use o ácido glicólico e, na outra, o retinol — ou então separar os horários (ácido de manhã, retinol à noite).  
+Entendo a dúvida, é comum querer potencializar os resultados, mas combinar retinol e ácido glicólico na mesma aplicação pode irritar bastante a pele. 
 
-Essa combinação tem “gravidade alta” e exige cuidado redobrado, além de proteção solar diária, já que ambos sensibilizam a pele ao sol.  
+Esses dois ativos são muito potentes: o ácido glicólico esfolia a superfície e o retinol acelera a renovação celular. Quando usados juntos, a irritação e o risco de comprometer a barreira cutânea aumentam significativamente. 
 
-Se precisar de orientações mais detalhadas, entre em contato com nosso atendimento humano: atendimento@luminabeauty.com.br ou WhatsApp (11) 4002‑8922.  
+A recomendação segura é alternar as noites – um dia com o tônico de ácido glicólico e no seguinte com o retinol – e, de manhã, aplicar protetor solar diário. Se precisar de mais orientação, nosso atendimento está à disposição (atendimento@luminabeauty.com.br ou WhatsApp (11) 4002‑8922). 💗
 
-Fontes: [1] politicas_lumina.pdf — seção 7.1; [2] glossario_ingredientes.csv — Glycolic Acid; [4] glossario_ingredientes.csv — Retinol.
-
-<sub>Provedor: `groq` · 6 trechos recuperados · 1625 ms</sub>
+<sub>Provedor: `groq` · 6 trechos recuperados · 2189 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
 - `politicas_lumina.pdf` — seção 7.1 Combinações que exigem cuidado, p. 6-7 (1/2) (relevância 15.970668274078978)
 - `glossario_ingredientes.csv` — ingrediente Glycolic Acid, linha 33 (relevância 10.031347007123598)
 - `glossario_ingredientes.csv` — ingrediente Lactic Acid, linha 34 (relevância 9.180799919732127)
-- `glossario_ingredientes.csv` — ingrediente Retinol, linha 19 (relevância 8.302941136237333)
+- `glossario_ingredientes.csv` — ingrediente Retinol, linha 19 (relevância 8.302941136237335)
 - `glossario_ingredientes.csv` — ingrediente Retinal, linha 20 (relevância 8.205875748377766)
 - `catalogo_produtos.csv` — produto LB-0011, linha 12 (relevância 5.576844685687661)
 
@@ -95,19 +80,18 @@ Fontes: [1] politicas_lumina.pdf — seção 7.1; [2] glossario_ingredientes.c
 
 ## 4. Em quantos dias chega em Manaus e quanto custa o frete?
 
-A entrega para Manaus (capitais do Norte) costuma levar de **8 a 14 dias úteis** a partir da data de postagem.
+Entendo sua curiosidade! ✨ Para Manaus, que está na região das capitais do Norte, o prazo de entrega é de 8 a 14 dias úteis, conforme a seção 4.2 das políticas de entrega da Lumina Beauty. 
 
-Sobre o valor do frete, essa informação não está presente nos trechos que temos. Para saber o custo exato, recomendo que você entre em contato com o nosso atendimento pelo e‑mail **atendimento@luminabeauty.com.br** ou pelo WhatsApp **(11) 4002‑8922**.
+Sobre o valor do frete, não encontrei essa informação nos documentos que tenho aqui. Você pode confirmar o custo enviando um e‑mail para atendimento@luminabeauty.com.br ou pelo WhatsApp (11) 4002‑8922. 
 
-Fontes:  
-- politicas_lumina.pdf — seção 4.2 Prazos de entrega por região.
+Qualquer outra dúvida, estou à disposição para ajudar!
 
-<sub>Provedor: `groq` · 4 trechos recuperados · 1209 ms</sub>
+<sub>Provedor: `groq` · 4 trechos recuperados · 1965 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
 - `politicas_lumina.pdf` — seção 3.7 Como abrir uma solicitação, p. 3 (relevância 18.405010837571332)
-- `politicas_lumina.pdf` — seção 4.2 Prazos de entrega por região, p. 4 (relevância 14.148767933304757)
+- `politicas_lumina.pdf` — seção 4.2 Prazos de entrega por região, p. 4 (relevância 14.148767933304756)
 - `politicas_lumina.pdf` — seção 4.5 Tentativas de entrega e extravio, p. 4 (relevância 12.900350073734717)
 - `politicas_lumina.pdf` — seção 4.4 Rastreamento, p. 4 (relevância 11.024357998566696)
 
@@ -117,17 +101,16 @@ Fontes:
 
 ## 5. Comprei um sérum, abri e tive alergia. Consigo devolver?
 
-Sim, você pode devolver o sérum aberto por causa da reação alérgica. A Lumina Beauty aceita devolução de produtos abertos quando houver reação adversa, desde que o pedido seja feito em até 30 dias após o recebimento. Não é necessário apresentar laudo médico; você pode escolher entre reembolso integral ou vale‑compra. Recomendamos sempre fazer o teste de sensibilidade no antebraço por 48 horas antes de usar o produto no rosto.
+Oi, que chato saber que você teve uma reação ao sérum, realmente pode ser frustrante 💗 
+Vamos ver como resolver isso. 
 
-Para abrir a solicitação, acesse **Minha Conta > Meus Pedidos > Solicitar troca ou devolução** ou envie um e‑mail para **atendimento@luminabeauty.com.br** informando o número do pedido. Você receberá um código de postagem reversa dos Correios em até 2 dias úteis para enviar o produto de volta.
+A Lumina aceita devolução de produto aberto por reação alérgica dentro de 30 dias do recebimento, sem precisar de laudo médico, e você pode escolher reembolso integral ou vale‑compra ✨ (fonte ). 
 
-Caso precise de mais ajuda, estamos à disposição pelo e‑mail acima ou pelo WhatsApp (11) 4002‑8922.
+Para solicitar, acesse Minha Conta > Meus Pedidos > Solicitar troca ou devolução, ou envie um e‑mail para atendimento@luminabeauty.com.br com o número do pedido (fonte ). 
 
-**Fontes:**  
-- politicas_lumina.pdf — seção 3.4 Reação alérgica  
-- politicas_lumina.pdf — seção 3.7 Como abrir uma solicitação
+Na próxima vez, faça o teste de sensibilidade no antebraço por 48 h antes de usar no rosto, como recomendamos (fonte ).
 
-<sub>Provedor: `groq` · 6 trechos recuperados · 2023 ms</sub>
+<sub>Provedor: `groq` · 6 trechos recuperados · 5609 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
@@ -144,14 +127,14 @@ Caso precise de mais ajuda, estamos à disposição pelo e‑mail acima ou pelo 
 
 ## 6. O que é niacinamida e para que serve?
 
-A niacinamida, também chamada de niacinamida (vitamina B3), é um ativo cosmético que atua controlando a oleosidade, reduzindo manchas e vermelhidão e fortalecendo a barreira cutânea. Ela é indicada para praticamente todos os tipos de pele – oleosa, mista, seca, normal, sensível, acneica e madura – e tem baixo risco de obstruir os poros (comedogenicidade 0/5). Para a maioria das pessoas o uso é tranquilo, embora concentrações acima de 5 % possam causar sensação de calor e vermelhidão (flushing) em peles reativas【2】.
+Oi, tudo bem? A niacinamida, também conhecida como vitamina B3, é um ativo que ajuda a regular a oleosidade, clarear manchas e fortalecer a barreira da pele 💗 (fonte: glossário de ingredientes).
 
-Essas propriedades tornam a niacinamida útil em rotinas que buscam melhorar a textura, minimizar poros dilatados, controlar a produção de sebo e atenuar manchas pigmentares.  
+Ela é indicada para quase todos os tipos de pele – oleosa, mista, seca, normal, sensível, acneica e madura – e costuma ser bem tolerada, com baixo risco de obstruir os poros (fonte: glossário de ingredientes).
 
-**Fontes:**  
-- [glossario_ingredientes.csv — linha 18]
+- Sérum Niacinamida 10% + Zinco, R$ 89,90, para pele oleosa, mista ou acneica (código LB-0001) 
+Ele ajuda a controlar a oleosidade e a melhorar a aparência dos poros (fonte: catálogo de produtos).
 
-<sub>Provedor: `groq` · 4 trechos recuperados · 1607 ms</sub>
+<sub>Provedor: `groq` · 4 trechos recuperados · 16442 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
@@ -166,21 +149,19 @@ Essas propriedades tornam a niacinamida útil em rotinas que buscam melhorar a t
 
 ## 7. Óleo de coco no rosto pode causar cravos?
 
-Sim. O óleo de coco (Cocos Nucifera Oil) tem comedogenicidade 4 de 5, o que indica alto risco de obstruir os poros. Por isso ele deve ser evitado em pele acneica, rosto oleoso ou em quem tem tendência a cravos, pois pode favorecer a formação de cravos no rosto. 
+Entendo sua preocupação, o óleo de coco pode sim gerar cravos no rosto. 
+Conforme o glossário de ingredientes, ele tem comedogenicidade 4 de 5, indicando alto risco de obstruir os poros. 
+Por isso, recomenda‑se evitá‑lo em pele acneica ou oleosa 💧 
 
-Se você busca um cuidado mais adequado para pele oleosa ou acneica, pode experimentar o **Gel de Limpeza Ácido Salicílico (LB-0301 – Lumina Clean)**, que é indicado para pele oleosa, acneica e mista e ajuda a controlar cravos e oleosidade. Preço: **R$ 59,90**. 
+Para peles oleosas ou acneicas, escolha ativos com baixa comedogenicidade. 
+O óleo mineral (Paraffinum Liquidum) apresenta comedogenicidade 1 de 5, sendo mais seguro segundo o mesmo glossário. 
+Assim você diminui a chance de surgirem novos cravos.
 
-Caso precise de mais orientações, nosso atendimento humano está disponível pelo e‑mail **atendimento@luminabeauty.com.br** ou WhatsApp **(11) 4002‑8922**.  
-
-**Fontes:**  
-[1] — glossario_ingredientes.csv (Cocos Nucifera Oil)  
-[5] — catalogo_produtos.csv (LB-0301 – Gel de Limpeza Ácido Salicílico)
-
-<sub>Provedor: `groq` · 6 trechos recuperados · 5244 ms</sub>
+<sub>Provedor: `groq` · 6 trechos recuperados · 12384 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
-- `glossario_ingredientes.csv` — ingrediente Cocos Nucifera Oil, linha 64 (relevância 17.227834673848335)
+- `glossario_ingredientes.csv` — ingrediente Cocos Nucifera Oil, linha 64 (relevância 17.22783467384833)
 - `glossario_ingredientes.csv` — ingrediente Paraffinum Liquidum, linha 71 (relevância 10.505925949617316)
 - `glossario_ingredientes.csv` — ingrediente Citrus Limon Peel Oil, linha 113 (relevância 9.138370780538732)
 - `glossario_ingredientes.csv` — ingrediente Persea Gratissima Oil, linha 70 (relevância 8.382467561221446)
@@ -193,16 +174,15 @@ Caso precise de mais orientações, nosso atendimento humano está disponível p
 
 ## 8. Como faço para excluir meus dados do site?
 
-Para excluir seus dados da Lumina Beauty, basta enviar um e‑mail para **privacidade@luminabeauty.com.br** solicitando a eliminação das informações que você forneceu. No pedido, indique que deseja exercer o direito de “eliminação” previsto na LGPD. A equipe de privacidade responderá em até 15 dias corridos e confirmará a remoção dos seus dados.
+Entendo que você queira remover seus dados, é importante ter controle sobre eles 💗 
 
-Caso prefira, você também pode entrar em contato com a encarregada de proteção de dados (DPO), Renata Alvim, pelo mesmo e‑mail. Assim que a solicitação for processada, todos os seus dados pessoais serão apagados dos nossos sistemas, exceto aqueles que a lei exige para fins fiscais ou de registro de transações.
+Para excluir seus dados, basta enviar um e‑mail para privacidade@luminabeauty.com.br. Eles respondem em até 15 dias corridos ✨ 
 
-Se precisar de mais alguma ajuda, estamos à disposição pelos nossos canais de atendimento (e‑mail atendimento@luminabeauty.com.br ou WhatsApp (11) 4002‑8922).
+No mesmo contato, você também pode solicitar acesso, correção, anonimização ou portabilidade, se precisar. 
 
-**Fontes:**  
-[1] politicas_lumina.pdf — seção 2.4 Seus direitos (LGPD — Lei 13.709/2018)
+Qualquer outra dúvida, fale com a gente pelo e‑mail atendimento@luminabeauty.com.br ou WhatsApp (11) 4002‑8922. Conforme a seção 2.4 da política de privacidade (politicas_lumina.pdf).
 
-<sub>Provedor: `groq` · 4 trechos recuperados · 5754 ms</sub>
+<sub>Provedor: `groq` · 4 trechos recuperados · 15169 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
@@ -217,17 +197,16 @@ Se precisar de mais alguma ajuda, estamos à disposição pelos nossos canais de
 
 ## 9. Quais produtos de vocês são veganos e cruelty-free?
 
-Todos os produtos da Lumina Beauty são **cruelty‑free** – a marca e seus fornecedores não realizam testes em animais, conforme indicado nas políticas da empresa【1†fonte: politicas_lumina.pdf — seção 4.6 Embalagem】.  
+Entendo que você quer saber quais itens são veganos e cruelty‑free. 💗 
 
-Quanto ao **status vegano**, nem todos os itens são veganos; apenas aqueles que não contêm cera de abelha, lanolina, manteiga de karité refinada com derivado animal ou baba de caramujo recebem a indicação “vegano: sim” no catálogo【1†fonte: politicas_lumina.pdf — seção 4.6 Embalagem】. Um exemplo de produto que é **vegano** e também cruelty‑free é o **Gel Hidratante Oil‑Free (código LB‑0102)**, que tem a classificação “Vegano: sim” no nosso catálogo【2†fonte: catalogo_produtos.csv — produto LB-0102】.  
+A Lumina Beauty é certificada cruelty‑free, nem a marca nem nossos fornecedores realizam testes em animais. 
 
-Para consultar a lista completa de produtos veganos, basta acessar o catálogo no site, onde cada item está marcado com “vegano: sim” ou “vegano: não”. Caso precise de ajuda para localizar algum produto específico, estamos à disposição pelo e‑mail atendimento@luminabeauty.com.br ou WhatsApp (11) 4002‑8922.  
+- Gel Hidratante Oil‑Free, R$ 64,90, para pele oleosa, mista, acneica (código LB-0102) 
+Ele é vegano e indicado para quem busca hidratação leve com toque seco. 
 
-Fontes:  
-- politicas_lumina.pdf — seção 4.6 Embalagem  
-- catalogo_produtos.csv — produto LB-0102
+Outros produtos veganos constam no catálogo com o selo “vegano: sim”. Se precisar de ajuda para encontrar mais opções, entre em contato pelo e‑mail atendimento@luminabeauty.com.br ou WhatsApp (11) 4002‑8922.
 
-<sub>Provedor: `groq` · 6 trechos recuperados · 7455 ms</sub>
+<sub>Provedor: `groq` · 6 trechos recuperados · 18371 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 
@@ -244,17 +223,15 @@ Fontes:
 
 ## 10. Meu pedido está parado no rastreio há 12 dias. E agora?
 
-Como o rastreio está parado há mais de 10 dias úteis, a política da Lumina indica que abrimos um sinistro junto à transportadora. O prazo de apuração da transportadora pode chegar a 30 dias corridos, mas nós não esperamos esse tempo para resolver: assim que o sinistro é aberto, reenviamos o pedido (com frete por nossa conta) ou efetuamos o reembolso em até 5 dias úteis.
+Entendo como isso pode ser frustrante, ainda mais quando o pedido fica parado. 💗 
 
-Se ainda não recebeu nenhum contato nosso, recomendo que abra uma solicitação pelo **Minha Conta > Meus Pedidos > Solicitar troca ou devolução** ou envie um e‑mail para **atendimento@luminabeauty.com.br** informando o número do pedido. Assim garantimos que o sinistro seja registrado rapidamente.
+Como o rastreio está sem atualização há mais de 10 dias úteis, abrimos um sinistro junto à transportadora. Assim que o sinistro for registrado, reenviamos o pedido ou reembolsamos em até 5 dias úteis. 
 
-Caso prefira, também pode falar conosco pelo WhatsApp (11) 4002‑8922 para acelerar o atendimento.
+Para agilizar, acesse Minha Conta > Meus Pedidos > Solicitar troca ou devolução, ou envie um e‑mail para atendimento@luminabeauty.com.br informando o número do pedido. 
 
-Fontes:  
-[1] politicas_lumina.pdf — seção 4.4 Rastreamento  
-[2] politicas_lumina.pdf — seção 4.5 Tentativas de entrega e extravio
+Qualquer dúvida, estou aqui para ajudar!
 
-<sub>Provedor: `groq` · 4 trechos recuperados · 4485 ms</sub>
+<sub>Provedor: `groq` · 4 trechos recuperados · 11892 ms</sub>
 
 <details><summary>Trechos consultados</summary>
 

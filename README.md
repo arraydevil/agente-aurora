@@ -209,9 +209,21 @@ assuntos.
 
 O prompt de sistema define a persona e impõe as regras que sustentam a
 confiabilidade: responder só com os trechos fornecidos, nunca inventar preço,
-prazo ou código, citar as fontes usadas, admitir quando não sabe, avisar sobre
-incompatibilidade entre ativos mesmo sem ser perguntado, e nunca diagnosticar
-nem prescrever.
+prazo ou código, admitir quando não sabe, avisar sobre incompatibilidade entre
+ativos mesmo sem ser perguntado, e nunca diagnosticar nem prescrever. Define
+também a voz da Aurora — acolhedora, sem jargão, no máximo dois emojis por
+resposta, e parágrafos curtos separados por linha em branco.
+
+As fontes **não** aparecem no corpo da resposta: elas voltam no campo `fontes`
+do JSON, e a interface as exibe em um painel próprio. Repetir a lista no texto
+só polui a leitura.
+
+Depois da geração vem uma camada de limpeza (`limpar_resposta`, em
+`app/agente.py`). O prompt pede texto puro, mas nenhum modelo obedece sempre —
+escapa um `**`, uma tabela em pipes, um marcador `[2]` no meio da frase. A
+limpeza remove essa marcação, converte tabela em lista e corta qualquer bloco
+"Fontes" que o modelo tenha escrito por conta própria. Fica no servidor, e não
+no frontend, para que a API, a interface e os exemplos gerados saiam iguais.
 
 O **roteador de provedores** tenta a OCI Generative AI primeiro e desce a lista
 quando algo falha. O último degrau não usa LLM nenhum: monta a resposta com os
