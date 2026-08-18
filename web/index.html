@@ -64,23 +64,6 @@
     justify-content: space-between; gap: 16px;
   }
 
-  .selo-base {
-    background: var(--vidro-forte);
-    border-radius: 999px;
-    padding: 9px 15px;
-    text-align: center;
-    box-shadow: var(--sombra-sutil);
-    flex-shrink: 0;
-  }
-  .selo-base b {
-    display: block;
-    font-family: var(--serifa);
-    font-size: 1.12rem;
-    line-height: 1.1;
-    color: var(--acento);
-  }
-  .selo-base span { font-size: .55rem; letter-spacing: .16em; color: var(--tinta-suave); }
-
   h1 {
     font-family: var(--serifa);
     font-weight: 400;
@@ -95,63 +78,20 @@
     display: flex; align-items: center; gap: 10px;
     margin: 16px 0 0; flex-wrap: wrap;
   }
-  .marca-pilula {
-    background: rgba(255, 255, 255, .7);
-    color: var(--acento);
-    border-radius: 999px;
-    padding: 3px 11px;
-    font-size: .6rem;
-    font-weight: 600;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-  }
-
   .barra-gradiente {
-    height: 3px; border-radius: 999px; margin: 18px 0 12px;
+    height: 3px; border-radius: 999px; margin: 20px 0 2px;
     background: linear-gradient(90deg,
       #f2c9d5 0%, #e7d3c4 22%, #cfdcc8 44%, #c6d5e4 68%, #ddc9e0 86%, #f2c9d5 100%);
-    position: relative;
   }
-  .barra-gradiente::after {
-    content: ""; position: absolute; top: 50%; left: 62%;
-    width: 11px; height: 11px; border-radius: 50%;
-    background: #fff; transform: translate(-50%, -50%);
-    box-shadow: 0 1px 5px rgba(160, 110, 130, .4);
-  }
-
-  .frase-guia { font-size: .93rem; color: var(--tinta); margin: 0 0 4px; }
-  .frase-guia b { color: var(--acento); font-weight: 600; }
 
   /* ------------------------------------------------------------- painéis */
 
-  main { padding: 20px 22px 190px; }
+  main { padding: 12px 22px 190px; }
 
   .secao-titulo {
     display: flex; justify-content: space-between;
-    align-items: baseline; margin: 26px 0 11px;
+    align-items: baseline; margin: 18px 0 11px;
   }
-
-  .indicadores {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-  }
-  .indicador {
-    background: var(--vidro);
-    border: 1px solid rgba(255, 255, 255, .75);
-    border-radius: 18px;
-    padding: 14px 12px;
-    text-align: center;
-    box-shadow: var(--sombra-sutil);
-    backdrop-filter: blur(9px);
-  }
-  .indicador .icone { font-size: .95rem; opacity: .55; }
-  .indicador .numero {
-    font-family: var(--serifa);
-    font-size: 1.65rem;
-    line-height: 1.15;
-    margin: 3px 0 1px;
-  }
-  .indicador .legenda { font-size: .55rem; letter-spacing: .15em; text-transform: uppercase; color: var(--tinta-suave); }
-  .indicador .nota { font-size: .68rem; color: var(--acento); margin-top: 4px; }
 
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
@@ -287,52 +227,19 @@
   <div class="conteudo">
     <div class="linha-topo">
       <span class="rotulo">Lumina Beauty</span>
-      <div class="selo-base">
-        <b id="contador">—</b>
-        <span>TRECHOS</span>
-      </div>
     </div>
 
     <h1>Oi, eu sou<br><em>Aurora</em></h1>
 
     <div class="assinatura">
       <span class="rotulo">Consultora virtual</span>
-      <span class="marca-pilula">PDF + CSV</span>
     </div>
 
     <div class="barra-gradiente"></div>
-    <p class="frase-guia">
-      Respondo sobre produtos, ingredientes e políticas da loja —
-      <b>sempre citando a fonte.</b>
-    </p>
   </div>
 </header>
 
 <main class="conteudo">
-
-  <section>
-    <div class="secao-titulo"><span class="rotulo">Minha base hoje</span></div>
-    <div class="indicadores">
-      <div class="indicador">
-        <div class="icone">📄</div>
-        <div class="numero" id="ind-documentos">—</div>
-        <div class="legenda">Documentos</div>
-        <div class="nota">PDF e CSV</div>
-      </div>
-      <div class="indicador">
-        <div class="icone">✦</div>
-        <div class="numero" id="ind-ingredientes">132</div>
-        <div class="legenda">Ingredientes</div>
-        <div class="nota">nomenclatura INCI</div>
-      </div>
-      <div class="indicador">
-        <div class="icone">◈</div>
-        <div class="numero" id="ind-motor" style="font-size:1.1rem">—</div>
-        <div class="legenda">Motor</div>
-        <div class="nota" id="ind-motor-nota">verificando</div>
-      </div>
-    </div>
-  </section>
 
   <section>
     <div class="secao-titulo"><span class="rotulo">Como posso ajudar</span></div>
@@ -460,23 +367,6 @@ fetch('/api/exemplos')
     });
   })
   .catch(() => { chips.innerHTML = ''; });
-
-fetch('/api/saude')
-  .then(r => r.json())
-  .then(d => {
-    document.getElementById('contador').textContent = d.trechos_indexados;
-    document.getElementById('ind-documentos').textContent = Object.keys(d.documentos || {}).length;
-
-    const ativo = (d.provedores_llm || []).find(p => p.configurado);
-    const nome = ativo ? ativo.provedor : 'extrativo';
-    document.getElementById('ind-motor').textContent = nome;
-    document.getElementById('ind-motor-nota').textContent =
-      nome === 'extrativo' ? 'sem LLM configurado' : 'em linguagem natural';
-  })
-  .catch(() => {
-    document.getElementById('contador').textContent = '—';
-    document.getElementById('ind-motor-nota').textContent = 'base offline';
-  });
 
 adicionarTurno('aurora',
   'Que bom te ver por aqui. 💗\n\n' +
