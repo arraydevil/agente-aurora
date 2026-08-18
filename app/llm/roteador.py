@@ -20,7 +20,10 @@ from .reserva import Gemini, Groq
 
 log = logging.getLogger(__name__)
 
-ORDEM_PADRAO = "oci,groq,gemini"
+# A OCI fica fora do padrão porque o SDK dela é opcional (requirements-oci.txt).
+# Para usá-la, basta acrescentar "oci" a PROVEDORES_LLM — o roteador monta a
+# cascata a partir dessa lista, em ordem.
+ORDEM_PADRAO = "groq,gemini"
 
 
 class RespostaExtrativa:

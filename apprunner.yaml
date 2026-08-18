@@ -1,0 +1,30 @@
+# Configuração de implantação no AWS App Runner (deploy a partir do código-fonte).
+#
+# O App Runner lê este arquivo direto do repositório, constrói a imagem na nuvem
+# e publica o serviço com URL HTTPS. Não é preciso ter Docker na máquina nem
+# empurrar imagem para o ECR.
+#
+# ATENÇÃO: nenhum segredo entra aqui — este arquivo é versionado. A GROQ_API_KEY
+# é configurada como variável de ambiente no console do App Runner, ou vinda do
+# AWS Secrets Manager. Veja docs/deploy-aws.md.
+
+version: 1.0
+runtime: python311
+
+build:
+  commands:
+    build:
+      - pip3 install -r requirements.txt
+
+run:
+  runtime-version: 3.11
+  command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+  network:
+    port: 8000
+  env:
+    - name: PROVEDORES_LLM
+      value: "groq,gemini"
+    - name: LOG_LEVEL
+      value: "INFO"
+    - name: ORIGENS_PERMITIDAS
+      value: "*"

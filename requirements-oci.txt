@@ -1,0 +1,11 @@
+# Dependência opcional: provedor OCI Generative AI (app/llm/oci_genai.py).
+#
+# Instale apenas se for rodar com a Oracle Cloud:
+#     pip install -r requirements.txt -r requirements-oci.txt
+#
+# E acrescente "oci" ao PROVEDORES_LLM no .env, junto de OCI_COMPARTMENT_ID.
+# Sem isso, o provedor se declara indisponível e o roteador passa para o próximo
+# sem custo de tempo.
+
+-r requirements.txt
+oci>=2.134.0
