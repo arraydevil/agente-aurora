@@ -12,11 +12,14 @@ Uso:
 from __future__ import annotations
 
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ))
+
+PAUSA_ENTRE_PERGUNTAS = 8.0
 
 from dotenv import load_dotenv  # noqa: E402
 
@@ -48,6 +51,10 @@ def main() -> None:
 
     for numero, pergunta in enumerate(PERGUNTAS_EXEMPLO, start=1):
         print(f"[{numero}/{len(PERGUNTAS_EXEMPLO)}] {pergunta}")
+        if numero > 1:
+            # Espaça as chamadas para não estourar o limite por minuto do nível
+            # gratuito. O provedor já repete em 429; isto evita chegar lá.
+            time.sleep(PAUSA_ENTRE_PERGUNTAS)
         resposta = agente.responder(pergunta)
 
         linhas.append(f"## {numero}. {pergunta}")
