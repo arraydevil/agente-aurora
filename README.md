@@ -192,11 +192,14 @@ Três adaptações ao português e ao domínio:
    "gestação"; ela escreve "espinha", o glossário diz "acne"; ela escreve
    "sumiu", a política diz "extravio". Um dicionário de ~50 entradas faz essa
    ponte.
-3. **Cobertura mínima** — um único termo em comum não caracteriza relevância.
-   A palavra "hoje" aparece por acaso na ficha da oxibenzona, e sem essa regra
-   a pergunta *"qual a escalação do time hoje"* recuperava aquele trecho.
-   Exigir dois termos distintos elimina o falso positivo sem prejudicar buscas
-   de uma palavra só.
+3. **Cobertura mínima, com exceção para nomes de entidade** — um único termo em
+   comum normalmente não caracteriza relevância: a palavra "hoje" aparece por
+   acaso na ficha da oxibenzona, e sem essa regra *"qual a escalação do time
+   hoje"* recuperava aquele trecho. Mas exigir dois acertos quebrou
+   *"o que é niacinamida e para que serve"* — só "niacinamida" existe no
+   índice, porque "serve" não aparece em documento nenhum. A regra final aceita
+   um acerto único **quando o termo nomeia um ingrediente ou produto da base**,
+   conjunto extraído dos campos INCI, nome popular, nome e código.
 
 Há ainda um **limite por documento** (padrão: 4), para que seis fichas de
 ingrediente não afoguem a política de troca quando a pergunta toca os dois
@@ -230,7 +233,7 @@ trechos recuperados. A aplicação nunca fica muda em uma apresentação.
 | LLM de reserva | Groq · Google Gemini | Continuidade da demonstração |
 | Cliente HTTP | httpx | Chamadas REST aos provedores de reserva |
 | Frontend | HTML, CSS e JavaScript sem framework | Zero build, um arquivo, tema claro e escuro |
-| Testes | pytest | 19 testes de ingestão, recuperação e resposta |
+| Testes | pytest | 28 testes de ingestão, recuperação e resposta |
 | Empacotamento | Docker | Mesma imagem na máquina local e na VM da OCI |
 
 ---
@@ -398,7 +401,7 @@ python scripts/gerar_exemplos.py
 pytest -q
 ```
 
-19 testes cobrindo:
+28 testes cobrindo:
 
 - extração do PDF, com verificação de que valores críticos sobrevivem
   (`7 dias corridos`, `R$ 199,00`, `LGPD`, `peróxido de benzoíla`);
@@ -408,6 +411,10 @@ pytest -q
 - rejeição de pergunta fora do escopo;
 - limite por documento;
 - resposta do agente com fontes, inclusive sem nenhum LLM configurado.
+
+`testes/test_entidades.py` é a regressão dos dois defeitos de recuperação
+descritos acima — a palavra solta que trazia trecho irrelevante, e a busca por
+nome de ingrediente que parou de funcionar quando o primeiro foi corrigido.
 
 ---
 
