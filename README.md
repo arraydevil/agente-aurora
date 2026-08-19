@@ -1,12 +1,12 @@
-# 💜 Aurora — Agente de Atendimento com Base de Conhecimento Documental
+# Aurora — Agente de Atendimento com Base de Conhecimento Documental
 
-> Desafio **Alura Agente** — Oracle Next Education (ONE) · IA for Tech
+> Desafio **Tech Builder Challenge** — Oracle Next Education (ONE) · 
 
 Aurora é uma agente de inteligência artificial que atende clientes de um
-e-commerce de dermocosméticos. Ela responde em linguagem natural sobre produtos,
+e-commerce ficticio de dermocosméticos. Ela responde em linguagem natural sobre produtos,
 ingredientes cosméticos, combinação de ativos, prazos de entrega, trocas,
 devoluções e privacidade — **sempre a partir do conteúdo de documentos reais
-(PDF e CSV), e sempre citando de onde tirou a informação.**
+(PDF e CSV) inseridos previamente no código, e sempre citando de onde tirou a informação.**
 
 O diferencial do projeto está na base de conhecimento: além das políticas da
 loja, a Aurora consulta um glossário curado de **132 ingredientes na nomenclatura
@@ -41,11 +41,9 @@ noite?"* ou *"esse sérum é seguro na gestação?"*.
 Um e-commerce de beleza recebe sempre as mesmas perguntas, e elas se dividem em
 dois grupos que normalmente vivem em sistemas separados:
 
-1. **Operacionais** — "quando chega?", "posso trocar?", "como excluo meus dados?"
-   As respostas estão em documentos de política, longos e chatos de ler.
-2. **Técnicas de produto** — "serve para pele oleosa?", "posso usar grávida?",
-   "esses dois ativos podem juntos?" As respostas dependem de conhecimento
-   dermocosmético que o atendente humano nem sempre domina.
+1. **Operacionais** — "quando chega?", "posso trocar?", "há frete aonde moro?"
+   As respostas normalmente estão em documentos de política, longos e chatos de ler.
+2. **Técnicas de produto** — "serve para pele oleosa?", "possuo alergia a ativo x tem outros que posso usar?", "posso usar estando grávida?", "esses dois ativos podem juntos?" As respostas dependem de conhecimento dermocosmético que o atendente humano nem sempre domina.
 
 Errar o segundo grupo não é só perder venda: recomendar retinol para uma cliente
 grávida, ou mandar empilhar ácido com retinoide, causa dano real.
