@@ -440,11 +440,12 @@ fetch('/api/exemplos')
   })
   .catch(() => { chips.innerHTML = ''; });
 
+// A lista de assuntos que existia aqui repetia os chips logo acima da conversa.
+// Duas linhas soam como gente; um menu de capacidades soa como call center.
 adicionarTurno('aurora',
-  'Que bom te ver por aqui. 💗\n\n' +
-  'Posso te ajudar com o catálogo da Lumina, ingredientes cosméticos, combinação ' +
-  'de ativos, prazos de entrega, trocas e privacidade — e sempre te mostro de qual ' +
-  'documento tirei a resposta.\n\nO que você quer saber?');
+  'Oi! Eu sou a Aurora, da Lumina. 💗\n\n' +
+  'Me conta o que você precisa — pode ser sobre um produto, um ingrediente do ' +
+  'rótulo ou um pedido.');
 </script>
 </body>
 </html>
