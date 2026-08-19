@@ -77,3 +77,20 @@ def test_preserva_texto_ja_limpo():
 def test_nao_confunde_a_palavra_fontes_no_meio_da_frase():
     entrada = "Nossas fontes de vitamina C são estáveis e o produto é vegano."
     assert limpar_resposta(entrada) == entrada
+
+
+def test_remove_citacao_inline_entre_parenteses():
+    """O modelo escrevia "(Fonte: [1])". Remover só o [1] deixava "(Fonte: )"
+    na tela, que foi exatamente o que apareceu em produção."""
+    entrada = "A devolução é aceita em até 30 dias. (Fonte: [1])"
+    assert limpar_resposta(entrada) == "A devolução é aceita em até 30 dias."
+
+
+def test_remove_citacao_inline_com_nome_de_arquivo():
+    entrada = "O frete é grátis acima de R$ 199,00 (fonte: politicas_lumina.pdf)."
+    assert limpar_resposta(entrada) == "O frete é grátis acima de R$ 199,00."
+
+
+def test_nao_remove_parenteses_de_conteudo():
+    entrada = "A niacinamida (vitamina B3) controla a oleosidade."
+    assert limpar_resposta(entrada) == entrada

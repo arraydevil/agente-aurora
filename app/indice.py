@@ -25,6 +25,9 @@ from .ingestao import Trecho, carregar_documentos
 K1 = 1.5
 B = 0.75
 
+# Peso extra para o trecho cujo nome de entidade coincide com a consulta.
+BONUS_ENTIDADE = 1.4
+
 PALAVRAS_VAZIAS = {
     "a", "ao", "aos", "as", "com", "como", "da", "das", "de", "dela", "dele",
     "do", "dos", "e", "ela", "ele", "em", "essa", "esse", "esta", "este", "eu",
@@ -151,11 +154,15 @@ class IndiceBM25:
         # código de produto. Servem para distinguir um termo que identifica uma
         # entidade da base de uma palavra qualquer que aparece na prosa.
         self.termos_entidade: set[str] = set()
+        self.entidade_por_trecho: list[set[str]] = []
         for trecho in trechos:
+            proprios: set[str] = set()
             for campo in ("inci", "nome_popular", "nome", "codigo"):
                 valor = trecho.metadados.get(campo)
                 if isinstance(valor, str):
-                    self.termos_entidade.update(tokenizar(valor))
+                    proprios.update(tokenizar(valor))
+            self.entidade_por_trecho.append(proprios)
+            self.termos_entidade.update(proprios)
 
     def _pontuar(self, indice: int, termos: set[str]) -> tuple[float, set[str]]:
         """Devolve a pontuacao BM25 e quais termos da consulta bateram."""
@@ -201,8 +208,17 @@ class IndiceBM25:
             pontuacao, casados = self._pontuar(i, termos)
             if pontuacao < pontuacao_minima:
                 continue
-            if len(casados) >= acertos_minimos or (casados & self.termos_entidade):
-                brutos.append(Resultado(self.trechos[i], pontuacao))
+            if len(casados) < acertos_minimos and not (casados & self.termos_entidade):
+                continue
+
+            # Um trecho que NOMEIA a entidade responde melhor do que um que a
+            # menciona de passagem. A seção "Combinações seguras" do PDF é uma
+            # lista de nomes de ingredientes: casa com quase toda pergunta sobre
+            # ingrediente e roubava o topo da ficha do próprio ingrediente.
+            if casados & self.entidade_por_trecho[i]:
+                pontuacao *= BONUS_ENTIDADE
+
+            brutos.append(Resultado(self.trechos[i], pontuacao))
         brutos.sort(key=lambda r: r.pontuacao, reverse=True)
 
         if limite_por_fonte is None:
