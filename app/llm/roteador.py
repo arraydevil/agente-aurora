@@ -40,12 +40,24 @@ class RespostaExtrativa:
         corpo = corpo.split("PERGUNTA DA CLIENTE:", 1)[0].strip()
         if not corpo:
             return (
-                "No momento não consegui gerar a resposta completa. "
-                "Fale com o atendimento em atendimento@luminabeauty.com.br."
+                "Não consegui gerar a resposta agora. Fale com o atendimento em "
+                "atendimento@luminabeauty.com.br ou pelo WhatsApp (11) 4002-8922."
             )
+        # O aviso não é decoração. Sem LLM, o que sai daqui é o texto cru dos
+        # trechos mais parecidos com a pergunta — e "parecido" inclui o oposto
+        # do que a pessoa quer. Perguntar "o que posso usar grávida" recupera
+        # justamente as fichas que dizem "contraindicado na gestação". Sem esta
+        # ressalva, a lista se parece com uma recomendação.
         return (
-            "Não consegui gerar a resposta em linguagem natural agora, mas "
-            "encontrei estas passagens nos documentos oficiais da Lumina Beauty:\n\n"
+            "Não consegui gerar a resposta em linguagem natural agora, então vou "
+            "ser honesta: abaixo estão os trechos dos documentos oficiais mais "
+            "próximos da sua pergunta, sem nenhuma interpretação minha.\n\n"
+            "Leia com atenção antes de decidir qualquer coisa. Esta lista NÃO é "
+            "uma recomendação, e pode conter itens que são justamente o contrário "
+            "do que você procura.\n\n"
+            "Se a sua dúvida envolve gestação, amamentação, alergia ou uso de "
+            "medicamento, fale com o atendimento em atendimento@luminabeauty.com.br "
+            "ou com sua dermatologista antes de usar qualquer produto.\n\n"
             f"{corpo[:1800]}"
         )
 
@@ -58,19 +70,37 @@ class SaidaLLM:
 
 
 class Roteador:
+    CATALOGO: dict[str, type] = {
+        "oci": OciGenAI,
+        "groq": Groq,
+        "gemini": Gemini,
+    }
+
     def __init__(self, ordem: str | None = None) -> None:
-        nomes = (ordem or os.getenv("PROVEDORES_LLM", ORDEM_PADRAO)).split(",")
-        catalogo: dict[str, type] = {
-            "oci": OciGenAI,
-            "groq": Groq,
-            "gemini": Gemini,
-        }
-        self.provedores: list[Provedor] = []
-        for nome in (n.strip().lower() for n in nomes):
-            classe = catalogo.get(nome)
+        configurado = ordem or os.getenv("PROVEDORES_LLM", "") or ORDEM_PADRAO
+        provedores = self._montar(configurado)
+
+        # Uma variável de ambiente vazia, com um nome errado de provedor ou com
+        # espaço sobrando derrubava toda a cascata em silêncio: sobrava apenas o
+        # modo extrativo, e a aplicação parecia funcionar. Falhar assim é pior do
+        # que falhar barulhento, então voltamos à ordem padrão e registramos.
+        if not provedores:
+            log.warning(
+                "PROVEDORES_LLM=%r não indica nenhum provedor conhecido (%s); "
+                "usando a ordem padrão %r",
+                configurado, ", ".join(self.CATALOGO), ORDEM_PADRAO,
+            )
+            provedores = self._montar(ORDEM_PADRAO)
+
+        self.provedores: list[Provedor] = [*provedores, RespostaExtrativa()]
+
+    def _montar(self, lista: str) -> list[Provedor]:
+        montados: list[Provedor] = []
+        for nome in (n.strip().lower() for n in lista.split(",")):
+            classe = self.CATALOGO.get(nome)
             if classe is not None:
-                self.provedores.append(classe())
-        self.provedores.append(RespostaExtrativa())
+                montados.append(classe())
+        return montados
 
     def status(self) -> list[dict[str, object]]:
         return [
