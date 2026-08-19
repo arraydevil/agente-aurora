@@ -457,13 +457,22 @@ Passo a passo em **[`docs/deploy-vercel.md`](docs/deploy-vercel.md)**.
 |---|---|
 | **URL pública** | **<https://agente-aurora.vercel.app>** |
 
-![Aurora respondendo sobre comedogenicidade do óleo de coco](docs/evidencia-deploy.png)
+![Aurora em produção, com a URL da Vercel na barra de endereços](docs/evidencia-deploy.png)
 
-A resposta cita a comedogenicidade 4 de 5 e a contraindicação para pele acneica,
-ambas vindas do glossário, e o rodapé mostra quantos trechos foram consultados,
-qual provedor respondeu e em quanto tempo.
+### Rastreabilidade da resposta
 
-![Aurora explicando a combinação de retinol com ácido glicólico](docs/capturas/conversa-combinacao-de-ativos.png)
+Toda resposta abre a lista dos trechos que a sustentam, com arquivo, linha e
+pontuação de relevância. Aqui a comedogenicidade 4 de 5 do óleo de coco veio da
+linha 64 do glossário — dá para conferir a informação na fonte.
+
+![Painel de fontes aberto, mostrando arquivo, linha e relevância de cada trecho](docs/capturas/fontes-citadas.png)
+
+### Recomendação de produto com restrição de preço
+
+![Aurora recomendando dois protetores solares dentro do limite de preço](docs/capturas/recomendacao-de-produto.png)
+
+A pergunta trazia duas restrições ao mesmo tempo — tipo de pele e teto de preço.
+Nome, código e valor saem do CSV do catálogo, sem invenção.
 
 Conferência rápida do que está no ar:
 
