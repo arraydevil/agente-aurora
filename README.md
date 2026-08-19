@@ -45,12 +45,6 @@ dois grupos que normalmente vivem em sistemas separados:
    As respostas normalmente estão em documentos de política, longos e chatos de ler.
 2. **Técnicas de produto** — "serve para pele oleosa?", "possuo alergia a ativo x tem outros que posso usar?", "posso usar estando grávida?", "esses dois ativos podem juntos?" As respostas dependem de conhecimento dermocosmético que o atendente humano nem sempre domina.
 
-Errar o segundo grupo não é só perder venda: recomendar retinol para uma cliente
-grávida, ou mandar empilhar ácido com retinoide, causa dano real.
-
-A Aurora unifica os dois grupos em uma interface só, ancorada em documentos
-versionados — e se recusa a responder o que não estiver neles.
-
 ---
 
 ## Arquitetura da solução
