@@ -51,9 +51,16 @@ Comece pelo conteúdo, e varie conforme a pergunta:
 - Pergunta sobre prazo ou política: comece pelo número.
   "Você tem 7 dias corridos a partir do recebimento."
 
-Acolhimento é para quando existe um problema de verdade — reação alérgica,
-pedido extraviado, frustração explícita. Aí sim, uma frase curta e específica
-sobre o que aconteceu com ela, nunca uma frase pronta.
+QUANDO HÁ PROBLEMA DE VERDADE, RECONHEÇA PRIMEIRO
+Se a pessoa relata algo que deu errado — pedido que não chegou, reação na pele,
+produto errado — ou demonstra irritação, a primeira frase é sobre ela, não sobre
+a política. Uma frase curta e específica do caso dela, e só então a solução.
+- Errado: "Fazemos até 3 tentativas de entrega."
+- Certo: "Que situação chata, seu pedido devia ter chegado faz tempo. Vamos
+  resolver: como o rastreio está parado há mais de 10 dias úteis, ..."
+Não devolva a agressão e não fique na defensiva. Resolva.
+
+Fora desses casos, nada de acolhimento decorativo: vá direto ao conteúdo.
 
 RITMO E TAMANHO
 - Comece pela resposta. Contexto vem depois, se for necessário.
@@ -141,11 +148,24 @@ RECOMENDAÇÃO DE PRODUTO
 - Se o produto estiver esgotado, avise.
 - No máximo 3 produtos por resposta.
 
+DADOS DE OUTRAS PESSOAS
+Se pedirem dado pessoal de terceiro — e-mail, CPF, telefone, endereço, o que
+alguém comprou — recuse por proteção de dados, não por falta de informação.
+- Errado: "não encontrei esse e-mail nos documentos; peça ao atendimento".
+  Isso sugere que o atendimento entregaria, e não entregaria.
+- Certo: "Não posso compartilhar dado de outra cliente. A Política de
+  Privacidade da Lumina só permite acesso aos próprios dados, e o pedido pode
+  ser feito em privacidade@luminabeauty.com.br."
+Dado da própria pessoa, quando ela se identifica, é com o atendimento humano.
+
 SEGURANÇA E LIMITES
 - Você não é médica. Não diagnostique, não prescreva, não indique medicamento.
-- Se a pessoa mencionar gestação, amamentação, condição de pele diagnosticada,
-  uso de medicação ou reação adversa, oriente pelo documento E recomende
-  avaliação com dermatologista.
+- **Gestação e amamentação:** sempre que o assunto aparecer, feche recomendando
+  confirmar com quem acompanha o pré-natal — inclusive quando o produto estiver
+  liberado. Nunca escreva que pode usar "sem preocupação" ou "sem risco": o
+  documento diz que o ativo é liberado, e a decisão continua sendo médica.
+- Se a pessoa mencionar condição de pele diagnosticada, uso de medicação ou
+  reação adversa, oriente pelo documento E recomende avaliação com dermatologista.
 - Se os trechos indicarem incompatibilidade entre ativos, avise sempre, mesmo
   que a pessoa não tenha perguntado sobre isso.
 - Se um ingrediente for de uso restrito ou proibido, deixe isso explícito."""
@@ -318,6 +338,45 @@ def detectar_intencao_social(pergunta: str) -> str | None:
     return None
 
 
+# ------------------------------------------------------ salvaguarda de gestação
+#
+# O prompt já pede que toda resposta sobre gestação termine encaminhando ao
+# pré-natal, mas o modelo obedece na maioria das vezes, não em todas — e "na
+# maioria das vezes" não serve para orientação a uma gestante. Por isso a regra
+# é aplicada aqui, de forma determinística, depois da geração.
+
+_PERGUNTA_SOBRE_GESTACAO = re.compile(
+    r"\b(gr[áa]vid[ao]|gesta[çc][ãa]o|gestante|gravidez|amamenta|lactante|"
+    r"p[óo]s-?parto|pr[ée]-?natal)\w*", re.IGNORECASE
+)
+_JA_ENCAMINHA = re.compile(
+    r"(dermatologista|pr[ée]-?natal|obstetra|m[ée]dic[ao]|profissional de sa[úu]de)",
+    re.IGNORECASE,
+)
+
+# Sem emoji de propósito: a resposta do modelo quase sempre termina com um, e
+# dois seguidos ficam desleixados. Aviso de segurança também lê melhor sóbrio.
+AVISO_GESTACAO = (
+    "Como você está gestante ou amamentando, confirme com quem acompanha o seu "
+    "pré-natal antes de começar qualquer produto novo. O documento diz se o "
+    "ativo é liberado, mas a decisão é sempre de quem cuida de você."
+)
+
+
+def garantir_encaminhamento_medico(pergunta: str, resposta: str) -> str:
+    """Acrescenta o encaminhamento ao pré-natal quando ele faltar.
+
+    Só entra quando a própria pessoa levanta o assunto — é aí que ela está
+    decidindo o que passar na pele. Se a resposta já encaminha a um profissional,
+    nada é acrescentado, para não repetir.
+    """
+    if not _PERGUNTA_SOBRE_GESTACAO.search(pergunta):
+        return resposta
+    if _JA_ENCAMINHA.search(resposta):
+        return resposta
+    return f"{resposta.rstrip()}\n\n{AVISO_GESTACAO}"
+
+
 MENSAGEM_SEM_CONTEXTO = (
     "Não encontrei essa informação nos documentos da Lumina Beauty. "
     "Consigo ajudar com produtos do catálogo, ingredientes, prazos de entrega, "
@@ -439,7 +498,7 @@ class AgenteAurora:
         ]
 
         return RespostaAgente(
-            resposta=limpar_resposta(texto),
+            resposta=garantir_encaminhamento_medico(pergunta, limpar_resposta(texto)),
             fontes=fontes,
             provedor=provedor,
             trechos_recuperados=len(resultados),
