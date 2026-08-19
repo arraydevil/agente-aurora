@@ -72,10 +72,10 @@ dois grupos que normalmente vivem em sistemas separados:
                             │                       │
               ┌─────────────▼─────────┐   ┌─────────▼──────────────┐
               │  Ingestão de          │   │ 1. Groq                │
-              │  documentos           │   │ 2. Gemini   (reserva)  │
-              │  app/ingestao.py      │   │ 3. OCI GenAI (opcional)│
-              └─────────────┬─────────┘   │ 4. Extrativo (sem LLM) │
-                            │             └────────────────────────┘
+              │  documentos           │   │ 2. Gemini (reserva)    │
+              │  app/ingestao.py      │   │ 3. Extrativo (sem LLM) │
+              └─────────────┬─────────┘   └────────────────────────┘
+                            │
        ┌────────────────────┼────────────────────┐
        │                    │                    │
 ┌──────▼───────┐   ┌────────▼────────┐   ┌───────▼──────────┐
@@ -296,30 +296,6 @@ GROQ_MODEL=openai/gpt-oss-120b
 > curl -H "Authorization: Bearer $GROQ_API_KEY" https://api.groq.com/openai/v1/models
 > ```
 
-<details>
-<summary>Usar a OCI Generative AI</summary>
-
-O SDK da OCI é opcional e não vem no `requirements.txt`:
-
-```bash
-pip install -r requirements-oci.txt
-```
-
-```env
-PROVEDORES_LLM=oci,groq
-OCI_COMPARTMENT_ID=ocid1.compartment.oc1..xxxxx
-OCI_REGION=sa-saopaulo-1
-OCI_GENAI_MODEL_ID=meta.llama-3.3-70b-instruct
-OCI_AUTH=config
-```
-
-Na sua máquina, a autenticação usa o `~/.oci/config` gerado pelo
-`oci setup config`. Em uma VM da OCI, troque para
-`OCI_AUTH=instance_principal` — a instância se autentica pela própria
-identidade, e nenhuma chave privada vai para o servidor.
-
-</details>
-
 > Sem nenhum provedor configurado a aplicação **sobe do mesmo jeito** e responde
 > em modo extrativo, devolvendo os trechos recuperados dos documentos.
 
@@ -498,16 +474,10 @@ o arquivo de configuração da vez:
 | Vercel | `vercel.json` | [`deploy-vercel.md`](docs/deploy-vercel.md) |
 | AWS App Runner | `apprunner.yaml` | [`deploy-aws.md`](docs/deploy-aws.md) |
 | Docker, em qualquer lugar | `Dockerfile` | [`deploy-aws.md`](docs/deploy-aws.md) |
-| Oracle Cloud (VM Always Free) | `Dockerfile` | [`deploy-oci.md`](docs/deploy-oci.md) |
 
 Nenhum arquivo de adaptação foi necessário: a Vercel detecta a instância FastAPI
 em `app/main.py` sozinha, e o App Runner e o Docker apenas chamam o mesmo
 `app.main:app`. Nenhuma linha do agente conhece a plataforma onde está rodando.
-
-O SDK da OCI não vem no `requirements.txt` — são mais de 100 MB para um provedor
-que fica inativo por padrão. Ele mora em `requirements-oci.txt`, opcional. Como
-o import é preguiçoso, sem o pacote o provedor apenas se declara indisponível e
-o roteador segue adiante.
 
 ---
 
@@ -522,7 +492,6 @@ agente-aurora/
 │   ├── ingestao.py           Leitura de PDF e CSV, geração de trechos
 │   └── llm/
 │       ├── base.py           Contrato dos provedores
-│       ├── oci_genai.py      OCI Generative AI (opcional)
 │       ├── reserva.py        Groq e Gemini via REST
 │       └── roteador.py       Fallback em cascata
 ├── dados/
@@ -542,7 +511,7 @@ agente-aurora/
 │   ├── test_entidades.py     cobertura mínima e nomes de entidade
 │   ├── test_limpeza.py       remoção de marcação das respostas
 │   └── test_social.py        saudação, agradecimento e despedida
-├── docs/deploy-oci.md        guia de implantação
+├── docs/deploy-vercel.md     guia de implantação
 ├── Dockerfile
 ├── requirements.txt
 └── .env.example
@@ -598,6 +567,6 @@ equipe auditar.
 
 <div align="center">
 
-Desenvolvido para o desafio **Alura Agente** · Oracle Next Education · 2026
+Desenvolvido para o **Tech Builder Challenge** · Oracle Next Education · 2026
 
 </div>
