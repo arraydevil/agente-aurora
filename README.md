@@ -470,11 +470,10 @@ desenvolvimento, e não teste escrito por obrigação:
 
 ## Deploy
 
-A aplicação roda no **AWS App Runner**, implantada a partir do código-fonte no
-GitHub: o App Runner constrói na nuvem, publica com URL HTTPS e reimplanta a
-cada `git push` na `main`.
+A aplicação está publicada na **Vercel**, importada direto do GitHub e
+republicada a cada `git push` na `main`.
 
-Passo a passo completo em **[`docs/deploy-aws.md`](docs/deploy-aws.md)**.
+Passo a passo em **[`docs/deploy-vercel.md`](docs/deploy-vercel.md)**.
 
 ### Evidência do deploy
 
@@ -483,24 +482,40 @@ Passo a passo completo em **[`docs/deploy-aws.md`](docs/deploy-aws.md)**.
 | **URL pública** | _preencher após o deploy_ |
 | **Captura de tela** | `docs/evidencia-deploy.png` |
 
+### Portabilidade
+
+O mesmo código roda, sem bifurcação por plataforma, em quatro destinos. Só muda
+o arquivo de configuração da vez:
+
+| Destino | Arquivo | Guia |
+|---|---|---|
+| Vercel | `vercel.json` + `api/index.py` | [`deploy-vercel.md`](docs/deploy-vercel.md) |
+| AWS App Runner | `apprunner.yaml` | [`deploy-aws.md`](docs/deploy-aws.md) |
+| Docker, em qualquer lugar | `Dockerfile` | [`deploy-aws.md`](docs/deploy-aws.md) |
+| Oracle Cloud (VM Always Free) | `Dockerfile` | [`deploy-oci.md`](docs/deploy-oci.md) |
+
+`api/index.py` só reexporta o `app.main:app`. Nenhuma lógica do agente conhece a
+plataforma onde está rodando.
+
 ### Por que não foi a Oracle Cloud
 
 O projeto foi arquitetado para a OCI, que é a nuvem pedida pelo desafio. O
 provedor `app/llm/oci_genai.py` está implementado, com suporte a autenticação
-por *instance principal*, e o guia de implantação continua no repositório em
-[`docs/deploy-oci.md`](docs/deploy-oci.md) — VM Always Free ARM, security list,
-firewall da instância, grupo dinâmico e policy para a Generative AI.
+por *instance principal*, e o guia completo de implantação continua no
+repositório — VM Always Free ARM, security list, firewall da instância, grupo
+dinâmico e policy para a Generative AI.
 
 O que faltou não foi código: **a criação da conta foi barrada na verificação de
-identidade da Oracle**, que exige cartão de crédito. Sem conta, não há
-implantação. A alternativa foi subir na AWS.
+identidade**, que exige cartão de crédito. A tentativa seguinte, na AWS, esbarrou
+na mesma parede — conta presa em ativação e serviços bloqueados no plano
+gratuito. A Vercel publicou sem exigir cartão.
 
-A migração custou poucos commits, e é justamente aí que a arquitetura se paga: a
-camada de LLM é um roteador de provedores intercambiáveis, então trocar de nuvem
-não exigiu tocar no agente, na ingestão nem na recuperação. O SDK da OCI saiu do
-`requirements.txt` — são mais de 100 MB para um provedor inativo — e ficou em
-`requirements-oci.txt`, opcional. Como o import é preguiçoso, sem o pacote o
-provedor apenas se declara indisponível e o roteador segue adiante.
+Trocar de nuvem duas vezes custou poucos commits, e é aí que a arquitetura se
+paga: a camada de LLM é um roteador de provedores intercambiáveis e o agente não
+conhece a plataforma. O SDK da OCI saiu do `requirements.txt` — são mais de
+100 MB para um provedor inativo — e ficou em `requirements-oci.txt`, opcional.
+Como o import é preguiçoso, sem o pacote o provedor apenas se declara
+indisponível e o roteador segue adiante.
 
 ---
 
