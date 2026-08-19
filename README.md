@@ -185,7 +185,7 @@ token próprio e inequívoco.
 **BM25 Okapi implementado em Python puro**, sem banco vetorial e sem modelo de
 embedding. Para uma base de poucas centenas de trechos, BM25 entrega qualidade
 equivalente sem exigir GPU, serviço externo ou centenas de MB de dependência —
-o que mantém a imagem Docker enxuta e o deploy na OCI simples.
+o que mantém o pacote enxuto e o deploy simples em qualquer plataforma.
 
 Três adaptações ao português e ao domínio:
 
@@ -228,9 +228,10 @@ limpeza remove essa marcação, converte tabela em lista e corta qualquer bloco
 "Fontes" que o modelo tenha escrito por conta própria. Fica no servidor, e não
 no frontend, para que a API, a interface e os exemplos gerados saiam iguais.
 
-O **roteador de provedores** tenta a OCI Generative AI primeiro e desce a lista
-quando algo falha. O último degrau não usa LLM nenhum: monta a resposta com os
-trechos recuperados. A aplicação nunca fica muda em uma apresentação.
+O **roteador de provedores** percorre a lista de `PROVEDORES_LLM` em ordem —
+hoje Groq e depois Gemini — e desce um degrau sempre que algo falha. O último
+degrau não usa LLM nenhum: monta a resposta com os trechos recuperados,
+avisando que aquilo não é recomendação. A aplicação nunca fica muda.
 
 ---
 
@@ -238,19 +239,26 @@ trechos recuperados. A aplicação nunca fica muda em uma apresentação.
 
 | Camada | Tecnologia | Por quê |
 |---|---|---|
-| Linguagem | Python 3.12 | Ecossistema de IA e SDK oficial da OCI |
+| Linguagem | Python 3.11+ | Ecossistema maduro para IA e leitura de documentos |
 | API | FastAPI + Uvicorn | Validação por tipo e Swagger automático em `/docs` |
 | Validação | Pydantic v2 | Contrato de entrada e saída da API |
 | Leitura de PDF | pypdf | Extração de texto página a página |
 | Geração de PDF | ReportLab | Constrói o PDF a partir do markdown-fonte |
-| Recuperação | BM25 Okapi (implementação própria) | Qualidade sem dependência pesada |
+| Recuperação | BM25 Okapi (implementação própria) | RAG com busca esparsa: sem embedding e sem banco vetorial |
 | LLM em produção | **Groq** (`openai/gpt-oss-120b`) | Latência baixa e nível gratuito generoso |
-| LLM alternativos | Google Gemini · OCI Generative AI | Roteador com provedores intercambiáveis |
-| Cliente HTTP | httpx | Chamadas REST aos provedores de reserva |
-| Frontend | HTML, CSS e JavaScript sem framework | Zero build, um arquivo, tema claro e escuro |
-| Testes | pytest | 64 testes de ingestão, recuperação, limpeza e resposta |
-| Hospedagem | AWS App Runner | Build na nuvem a partir do GitHub, HTTPS automático |
+| LLM de reserva | Google Gemini (`gemini-3.6-flash`) | Segundo degrau da cascata de provedores |
+| Cliente HTTP | httpx | Chamadas REST aos provedores de LLM |
+| Frontend | HTML, CSS e JavaScript sem framework | Zero build, um arquivo, paleta sakura |
+| Testes | pytest | 80 testes de ingestão, recuperação, limpeza e resposta |
+| Hospedagem | **Vercel** | Build a partir do GitHub e redeploy a cada `git push` |
 | Empacotamento | Docker | Mesma imagem em qualquer nuvem ou na máquina local |
+
+> **Sobre RAG e banco vetorial.** O projeto usa RAG — recuperar, aumentar o
+> prompt, gerar — mas com **recuperação esparsa**, não vetorial. Não há
+> embedding, Chroma, FAISS nem pgvector: a busca é BM25 Okapi escrita à mão em
+> `app/indice.py`. Vetores são uma implementação possível da etapa de
+> recuperação, não um requisito de RAG. O porquê da escolha está em
+> [Decisões de projeto](#decisões-de-projeto).
 
 ---
 
@@ -386,7 +394,7 @@ curl -X POST http://localhost:8000/api/perguntar \
       "tipo": "csv"
     }
   ],
-  "provedor": "oci",
+  "provedor": "groq",
   "trechos_recuperados": 6,
   "tempo_ms": 1840
 }
@@ -520,7 +528,7 @@ agente-aurora/
 │   ├── ingestao.py           Leitura de PDF e CSV, geração de trechos
 │   └── llm/
 │       ├── base.py           Contrato dos provedores
-│       ├── oci_genai.py      OCI Generative AI (principal)
+│       ├── oci_genai.py      OCI Generative AI (opcional)
 │       ├── reserva.py        Groq e Gemini via REST
 │       └── roteador.py       Fallback em cascata
 ├── dados/
@@ -553,7 +561,7 @@ agente-aurora/
 **BM25 em vez de banco vetorial.** Com 208 trechos, embeddings trariam ganho
 marginal e um custo real: modelo para baixar, dependência pesada, e uma chamada
 externa a mais no caminho de cada pergunta. BM25 é determinístico, roda em
-milissegundos, cabe na VM Always Free e é auditável — dá para explicar
+milissegundos, cabe em qualquer plano gratuito e é auditável — dá para explicar
 exatamente por que um trecho foi escolhido.
 
 **Fallback em cascata entre provedores.** Uma demonstração que morre porque um
