@@ -487,13 +487,14 @@ o arquivo de configuração da vez:
 
 | Destino | Arquivo | Guia |
 |---|---|---|
-| Vercel | `vercel.json` + `api/index.py` | [`deploy-vercel.md`](docs/deploy-vercel.md) |
+| Vercel | `vercel.json` | [`deploy-vercel.md`](docs/deploy-vercel.md) |
 | AWS App Runner | `apprunner.yaml` | [`deploy-aws.md`](docs/deploy-aws.md) |
 | Docker, em qualquer lugar | `Dockerfile` | [`deploy-aws.md`](docs/deploy-aws.md) |
 | Oracle Cloud (VM Always Free) | `Dockerfile` | [`deploy-oci.md`](docs/deploy-oci.md) |
 
-`api/index.py` só reexporta o `app.main:app`. Nenhuma lógica do agente conhece a
-plataforma onde está rodando.
+Nenhum arquivo de adaptação foi necessário: a Vercel detecta a instância FastAPI
+em `app/main.py` sozinha, e o App Runner e o Docker apenas chamam o mesmo
+`app.main:app`. Nenhuma linha do agente conhece a plataforma onde está rodando.
 
 ### Por que não foi a Oracle Cloud
 

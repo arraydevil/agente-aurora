@@ -10,20 +10,36 @@ Tempo estimado: **5 a 10 minutos**.
 
 ## Como funciona
 
-A Vercel executa a aplicação como função serverless Python. O arquivo
-`api/index.py` apenas reexporta a mesma aplicação FastAPI de `app/main.py`, e o
-`vercel.json` manda todas as rotas para ela.
+A Vercel tem detecção nativa de FastAPI: ela procura uma instância chamada `app`
+em entrypoints conhecidos — `main.py`, `app.py`, `index.py`, `server.py`,
+`asgi.py`, `wsgi.py`, na raiz ou dentro de `src/` e `app/`.
 
-Não há bifurcação de código por plataforma: o mesmo `app/` roda na Vercel, em
-container Docker e no AWS App Runner.
+O projeto já satisfaz isso: `app/main.py` expõe `app = FastAPI(...)`. **Não é
+preciso arquivo de adaptação nem rewrite.** A aplicação inteira vira uma única
+Vercel Function que atende todas as rotas.
 
 ```
-vercel.json      rewrites: /(.*) -> /api/index
-api/index.py     reexporta app.main:app
-app/             agente, índice, ingestão, provedores de LLM
-dados/           PDF e CSVs, empacotados junto pela chave includeFiles
-web/index.html   interface de chat
+vercel.json      maxDuration e includeFiles da função
+app/main.py      entrypoint detectado automaticamente
+dados/           PDF e CSVs, empacotados pela chave includeFiles
+web/index.html   interface de chat, servida pela própria aplicação
 ```
+
+O `vercel.json` é curto de propósito:
+
+```json
+{
+  "functions": {
+    "app/main.py": {
+      "maxDuration": 60,
+      "includeFiles": "{dados,web}/**"
+    }
+  }
+}
+```
+
+> A chave de `functions` precisa ser o **caminho do entrypoint resolvido**
+> (`app/main.py`), não um caminho genérico.
 
 ---
 
@@ -111,10 +127,16 @@ Cada `git push` na branch `main` republica automaticamente. Não há passo manua
 
 ## Solução de problemas
 
+**`{"detail":"Not Found"}` na raiz do site.**
+Esse 404 vem do próprio FastAPI, o que significa que a função subiu e o problema
+é de rota. Quase sempre é um `rewrite` no `vercel.json` apontando para um caminho
+que a aplicação não conhece. Com a detecção nativa de FastAPI **não deve existir
+nenhum rewrite**: a Vercel entrega a rota original para a aplicação.
+
 **Erro 500 e log dizendo `FileNotFoundError` em `dados/`.**
 A chave `includeFiles` do `vercel.json` é o que empacota os documentos junto da
 função. Confirme que o `vercel.json` foi enviado ao repositório e que o padrão
-`{app,dados,web}/**` está intacto.
+`{dados,web}/**` está intacto.
 
 **A primeira visita demora alguns segundos.**
 É o *cold start*: a função sobe, lê o PDF e monta o índice BM25 dos 208 trechos.
