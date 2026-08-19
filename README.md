@@ -456,7 +456,14 @@ Passo a passo em **[`docs/deploy-vercel.md`](docs/deploy-vercel.md)**.
 | | |
 |---|---|
 | **URL pública** | **<https://agente-aurora.vercel.app>** |
-| **Captura de tela** | `docs/evidencia-deploy.png` |
+
+![Aurora respondendo sobre comedogenicidade do óleo de coco](docs/evidencia-deploy.png)
+
+A resposta cita a comedogenicidade 4 de 5 e a contraindicação para pele acneica,
+ambas vindas do glossário, e o rodapé mostra quantos trechos foram consultados,
+qual provedor respondeu e em quanto tempo.
+
+![Aurora explicando a combinação de retinol com ácido glicólico](docs/capturas/conversa-combinacao-de-ativos.png)
 
 Conferência rápida do que está no ar:
 
