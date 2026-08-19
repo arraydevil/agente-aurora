@@ -496,25 +496,10 @@ Nenhum arquivo de adaptação foi necessário: a Vercel detecta a instância Fas
 em `app/main.py` sozinha, e o App Runner e o Docker apenas chamam o mesmo
 `app.main:app`. Nenhuma linha do agente conhece a plataforma onde está rodando.
 
-### Por que não foi a Oracle Cloud
-
-O projeto foi arquitetado para a OCI, que é a nuvem pedida pelo desafio. O
-provedor `app/llm/oci_genai.py` está implementado, com suporte a autenticação
-por *instance principal*, e o guia completo de implantação continua no
-repositório — VM Always Free ARM, security list, firewall da instância, grupo
-dinâmico e policy para a Generative AI.
-
-O que faltou não foi código: **a criação da conta foi barrada na verificação de
-identidade**, que exige cartão de crédito. A tentativa seguinte, na AWS, esbarrou
-na mesma parede — conta presa em ativação e serviços bloqueados no plano
-gratuito. A Vercel publicou sem exigir cartão.
-
-Trocar de nuvem duas vezes custou poucos commits, e é aí que a arquitetura se
-paga: a camada de LLM é um roteador de provedores intercambiáveis e o agente não
-conhece a plataforma. O SDK da OCI saiu do `requirements.txt` — são mais de
-100 MB para um provedor inativo — e ficou em `requirements-oci.txt`, opcional.
-Como o import é preguiçoso, sem o pacote o provedor apenas se declara
-indisponível e o roteador segue adiante.
+O SDK da OCI não vem no `requirements.txt` — são mais de 100 MB para um provedor
+que fica inativo por padrão. Ele mora em `requirements-oci.txt`, opcional. Como
+o import é preguiçoso, sem o pacote o provedor apenas se declara indisponível e
+o roteador segue adiante.
 
 ---
 
@@ -570,10 +555,9 @@ serviço externo oscilou não demonstra nada. A cascata tenta cada provedor
 configurado e, no último degrau, responde com os próprios trechos recuperados,
 sem LLM nenhum.
 
-Essa decisão se pagou de forma inesperada: quando a conta da Oracle foi negada,
-mudar de nuvem e de provedor de inferência custou alterar uma lista no `.env` e
-acrescentar um arquivo de deploy. O agente, a ingestão e a recuperação não foram
-tocados.
+Trocar de provedor de inferência custa alterar uma lista no `.env`. Trocar de
+nuvem custa acrescentar um arquivo de configuração. O agente, a ingestão e a
+recuperação não são tocados em nenhum dos dois casos.
 
 **Recusa explícita.** Quando nada passa do limiar, o agente responde que não
 sabe **antes** de chamar o LLM. Um agente que responde tudo é um agente em que
