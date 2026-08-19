@@ -477,8 +477,14 @@ Passo a passo em **[`docs/deploy-vercel.md`](docs/deploy-vercel.md)**.
 
 | | |
 |---|---|
-| **URL pública** | _preencher após o deploy_ |
+| **URL pública** | **<https://agente-aurora.vercel.app>** |
 | **Captura de tela** | `docs/evidencia-deploy.png` |
+
+Conferência rápida do que está no ar:
+
+```bash
+curl https://agente-aurora.vercel.app/api/saude
+```
 
 ### Portabilidade
 
